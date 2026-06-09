@@ -1,46 +1,135 @@
+import { useForm } from "react-hook-form";
 import { Link } from "react-router-dom";
+import {
+  registerUserSchema,
+  type RegisterUserFormData,
+} from "../../schemas/auth.schema";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useEffect, useState } from "react";
 
 function RegisterUserForm() {
+  const [fileName, setFileName] = useState("No file chosen");
+  const {
+    register,
+    setValue,
+    handleSubmit,
+    formState: { errors },
+    clearErrors,
+  } = useForm<RegisterUserFormData>({
+    resolver: zodResolver(registerUserSchema),
+  });
+
+  const onSubmit = (data: RegisterUserFormData) => {
+    console.log(data);
+    console.log("FILE:", data.profileImage?.[0]);
+    console.log("FILE NAME:", data.profileImage?.[0]?.name);
+  };
+
+  useEffect(() => {
+    if (Object.keys(errors).length === 0) return;
+
+    const timer = setTimeout(() => {
+      clearErrors();
+    }, 3000);
+
+    return () => {
+      clearTimeout(timer);
+    };
+  }, [errors, clearErrors]);
+
   return (
-    <form className="flex flex-col gap-4">
+    <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4">
       {/* Username */}
       <div>
         <label className="neo-label">Username</label>
         <input
+          {...register("username")}
+          onChange={() => {
+            clearErrors("username");
+          }}
           type="text"
           placeholder="create your username"
           className="neo-input neo-input:focus bg-accent-1"
         />
+        {errors.username && (
+          <p className={`neo-error neo-error-animate`}>
+            {errors.username.message}
+          </p>
+        )}
       </div>
 
       {/* Email */}
       <div>
         <label className="neo-label">Email</label>
         <input
+          {...register("email")}
+          onChange={() => {
+            clearErrors("email");
+          }}
           type="email"
           placeholder="enter your email"
           className="neo-input neo-input:focus bg-accent-2"
         />
+        {errors.email && (
+          <p className={`neo-error neo-error-animate`}>
+            {errors.email.message}
+          </p>
+        )}
       </div>
 
       {/* Password */}
       <div>
         <label className="neo-label">Password</label>
         <input
+          {...register("password")}
+          onChange={() => {
+            clearErrors("password");
+          }}
           type="password"
           placeholder="enter your password"
           className="neo-input neo-input:focus bg-accent-1"
         />
+        {errors.password && (
+          <p className={`neo-error neo-error-animate`}>
+            {errors.password.message}
+          </p>
+        )}
       </div>
 
       {/* File Upload */}
-      <div className="flex justify-between items-center">
-        <div className="neo-file max-w-1/2 bg-accent-2">
-          <input type="file" id="fileInput" className="hidden" />
-          <div className="neo-file-display">No file chosen</div>
-          <label htmlFor="fileInput" className="neo-file-btn">
-            Select a file
-          </label>
+      <div className="flex justify-between items-start gap-4">
+        <div className="flex flex-col w-1/2">
+          <div className="neo-file bg-accent-2">
+            <input
+              // {...register("profileImage")}
+              onChange={(e) => {
+                const files = e.target.files;
+
+                if (!files || files.length === 0) return;
+
+                console.log(files);
+
+                const fileName = files[0].name;
+                clearErrors("profileImage");
+
+                setValue("profileImage", files, { shouldValidate: true });
+                setFileName(fileName);
+              }}
+              accept="image/*"
+              type="file"
+              id="fileInput"
+              className="hidden"
+            />
+            <div className="neo-file-display  truncate"> {fileName}</div>
+            <label htmlFor="fileInput" className="neo-file-btn">
+              Upload Image
+            </label>
+          </div>
+          {errors.profileImage && (
+            <p className={`neo-error mt-1 neo-error-animate`}>
+              {errors.profileImage.message}
+            </p>
+          )}
         </div>
         <div className="neo-container p-4 bg-accent-2 max-w-1/2">
           <p className="">
@@ -56,7 +145,10 @@ function RegisterUserForm() {
       </div>
 
       {/* Button */}
-      <button className="neo-button bg-button-1 hover-bg-button-1 ease-in-out font-bold">
+      <button
+        type="submit"
+        className="neo-button bg-button-1 hover-bg-button-1 ease-in-out font-bold"
+      >
         Register your account
       </button>
     </form>

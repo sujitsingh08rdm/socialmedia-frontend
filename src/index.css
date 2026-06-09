@@ -1,1 +1,158 @@
 @import "tailwindcss";
+
+/*
+. {
+  primary: #9fa1ff;
+  secondary: #b5baff;
+  tertiary: #aee2ff;
+  quadiary: #d9f9df;
+}
+
+*/
+/* card */
+/* border-2 border-black shadow-[6px_6px_0px_#000] bg-white */
+
+/* button */
+/* border-2 border-black shadow-[4px_4px_0px_#000] active:translate-x-[2px] active:translate-y-[2px] */
+
+/* input */
+/* border-2 border-black shadow-[3px_3px_0px_#000] */
+
+@layer components {
+  .neo-card {
+    @apply bg-white border-2 border-black shadow-[6px_6px_0px_#000] p-4;
+  }
+
+  .neo-button {
+    @apply border-2 border-black font-bold px-4 py-2 shadow-[4px_4px_0px_#000]
+           active:translate-x-[2px] active:translate-y-[2px];
+  }
+
+  .neo-container {
+    @apply w-full  p-2 shadow-[3px_3px_0px_#000];
+  }
+
+  .neo-input {
+    @apply w-full border-2 border-black p-2 shadow-[3px_3px_0px_#000] outline-none;
+  }
+
+  .neo-input:focus {
+    transform: translate(3px, 3px);
+    box-shadow: 0px 0px 0px #000;
+  }
+
+  .neo-label {
+    @apply font-bold text-black mb-1 block;
+  }
+
+  .neo-file {
+    @apply border-2 border-black  p-2 flex items-center gap-2 shadow-[4px_4px_0px_#000];
+  }
+
+  .neo-file-display {
+    @apply border-2 border-black px-2 py-1 text-sm min-w-[180px] shadow-[2px_2px_0px_#000];
+  }
+
+  .neo-file-btn {
+    @apply border-2 border-black px-3 py-1 font-bold cursor-pointer
+           shadow-[3px_3px_0px_#000]
+           active:translate-x-[2px] active:translate-y-[2px];
+  }
+}
+
+@layer utilities {
+  /* Background colors */
+  .bg-primary {
+    background-color: #9fa1ff;
+  }
+
+  .bg-secondary {
+    background-color: #cccdff;
+  }
+
+  .bg-accent-1 {
+    background-color: #aee2ff;
+  }
+
+  .bg-accent-2 {
+    background-color: #d9f9df;
+  }
+
+  .bg-button-1 {
+    background-color: #eaff00;
+  }
+
+  .hover-bg-button-1:hover {
+    background-color: #ffe2e2;
+  }
+
+  .bg-button-2 {
+    background-color: #ffe2e2;
+  }
+
+  .hover-bg-button-2:hover {
+    background-color: #eaff00;
+  }
+
+  .bg-warning {
+    background-color: #ff1e00;
+  }
+
+  /* Text colors */
+  .text-primary {
+    color: #9fa1ff;
+  }
+
+  .text-secondary {
+    color: #cccdff;
+  }
+
+  .text-accent-1 {
+    color: #aee2ff;
+  }
+
+  .text-accent-2 {
+    color: #d9f9df;
+  }
+
+  .text-button-1 {
+    color: black;
+  }
+
+  .text-button-2 {
+    color: white;
+  }
+
+  .text-warning {
+    color: #ff1e00;
+  }
+
+  /* Border colors */
+  .border-primary {
+    border-color: #9fa1ff;
+  }
+
+  .border-secondary {
+    border-color: #cccdff;
+  }
+
+  .border-accent-1 {
+    border-color: #aee2ff;
+  }
+
+  .border-accent-2 {
+    border-color: #d9f9df;
+  }
+
+  .border-button-1 {
+    border-color: black;
+  }
+
+  .border-button-2 {
+    border-color: white;
+  }
+
+  .border-warning {
+    border-color: #ff1e00;
+  }
+}

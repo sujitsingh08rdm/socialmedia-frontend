@@ -6,23 +6,42 @@ import {
 } from "../../schemas/auth.schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect, useState } from "react";
+import { registerUser } from "../../api/auth.api";
+import Spinner from "../General/Spinner";
+import { toast } from "react-toastify";
 
 function RegisterUserForm() {
   const [fileName, setFileName] = useState("No file chosen");
+  const [serverError, setServerError] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
+
   const {
     register,
     setValue,
     handleSubmit,
     formState: { errors },
     clearErrors,
+    reset,
   } = useForm<RegisterUserFormData>({
     resolver: zodResolver(registerUserSchema),
   });
 
-  const onSubmit = (data: RegisterUserFormData) => {
-    console.log(data);
-    console.log("FILE:", data.profileImage?.[0]);
-    console.log("FILE NAME:", data.profileImage?.[0]?.name);
+  const onSubmit = async (data: RegisterUserFormData) => {
+    console.log(data, "data");
+    try {
+      setLoading(true);
+      setServerError(null);
+
+      const response = await registerUser(data);
+      console.log("Registerred response : ->", response);
+      toast.success("Account created successfully");
+      reset();
+    } catch (error: any) {
+      console.log("Catch block hit:", error);
+      setServerError(error.message);
+    } finally {
+      setLoading(false);
+    }
   };
 
   useEffect(() => {
@@ -145,11 +164,15 @@ function RegisterUserForm() {
       </div>
 
       {/* Button */}
+      {serverError && (
+        <div className="neo-error neo-error-animate">{serverError}</div>
+      )}
       <button
         type="submit"
+        disabled={loading}
         className="neo-button bg-button-1 hover-bg-button-1 ease-in-out font-bold"
       >
-        Register your account
+        {loading ? <Spinner /> : "Register your account"}
       </button>
     </form>
   );

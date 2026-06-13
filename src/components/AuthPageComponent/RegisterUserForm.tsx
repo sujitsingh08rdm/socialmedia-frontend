@@ -1,5 +1,5 @@
 import { useForm } from "react-hook-form";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import {
   registerUserSchema,
   type RegisterUserFormData,
@@ -7,13 +7,17 @@ import {
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect, useState } from "react";
 import { registerUser } from "../../api/auth.api";
-import Spinner from "../General/Spinner";
 import { toast } from "react-toastify";
+import Spinner from "../General/Spinner";
+import { useDispatch } from "react-redux";
+import { setUser } from "../../store/slices/auth.slice";
 
 function RegisterUserForm() {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
   const [fileName, setFileName] = useState("No file chosen");
   const [serverError, setServerError] = useState<string | null>(null);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState<boolean>(false);
 
   const {
     register,
@@ -33,11 +37,11 @@ function RegisterUserForm() {
       setServerError(null);
 
       const response = await registerUser(data);
-      console.log("Registerred response : ->", response);
+      dispatch(setUser(response.data.user));
       toast.success("Account created successfully");
       reset();
+      navigate("/login");
     } catch (error: any) {
-      console.log("Catch block hit:", error);
       setServerError(error.message);
     } finally {
       setLoading(false);

@@ -1,10 +1,11 @@
 import api from "../lib/axios";
 
-import type { RegisterUserFormData } from "../schemas/auth.schema";
-import { backendUrl } from "../utils/constants";
+import type {
+  LoginUserFormData,
+  RegisterUserFormData,
+} from "../schemas/auth.schema";
 
 export const registerUser = async (data: RegisterUserFormData) => {
-  console.log(backendUrl);
   const formData = new FormData();
 
   formData.append("username", data.username);
@@ -21,5 +22,34 @@ export const registerUser = async (data: RegisterUserFormData) => {
     },
   });
 
+  return response.data;
+};
+
+export const loginUser = async (data: LoginUserFormData) => {
+  const formData = new FormData();
+
+  if (data.identifier.includes("@")) {
+    console.log("email");
+
+    formData.append("email", data.identifier);
+  } else {
+    console.log("useranme");
+    formData.append("username", data.identifier);
+  }
+  formData.append("password", data.password);
+
+  console.log(formData);
+
+  const response = await api.post("/users/login", formData, {
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+
+  return response.data;
+};
+
+export const getCurrentUser = async () => {
+  const response = await api.get("/users/current-user");
   return response.data;
 };

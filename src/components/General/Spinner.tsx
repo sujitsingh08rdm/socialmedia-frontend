@@ -1,6 +1,9 @@
-import React from "react";
 import { ClipLoader } from "react-spinners";
 
-export default function Spinner() {
-  return <ClipLoader size={16} />;
+type SpinnerProps = {
+  size?: number;
+};
+
+export default function Spinner({ size = 16 }: SpinnerProps) {
+  return <ClipLoader size={size} />;
 }

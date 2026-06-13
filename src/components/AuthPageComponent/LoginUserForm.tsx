@@ -1,21 +1,47 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { loginUserSchema } from "../../schemas/auth.schema";
 import type { LoginUserFormData } from "../../schemas/auth.schema";
 import { useEffect, useState } from "react";
+import { loginUser } from "../../api/auth.api";
+import { toast } from "react-toastify";
+import Spinner from "../General/Spinner";
+import { useDispatch } from "react-redux";
+import { setUser } from "../../store/slices/auth.slice";
 
 function LoginUserForm() {
+  const [serverError, setServerError] = useState<string | null>(null);
+  const [loading, setLoading] = useState<boolean>(false);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
   const {
     register,
     handleSubmit,
     formState: { errors },
     clearErrors,
+    reset,
   } = useForm<LoginUserFormData>({ resolver: zodResolver(loginUserSchema) });
 
-  const onSubmit = (data: LoginUserFormData) => {
-    console.log(data);
+  const onSubmit = async (data: LoginUserFormData) => {
     // data.indentifier =username or email
+    try {
+      setLoading(true);
+      setServerError(null);
+      const response = await loginUser(data);
+      console.log(response.data, "from loggin in");
+
+      dispatch(setUser(response.data.user));
+      toast.success(response.message);
+      reset();
+      navigate("/");
+    } catch (error: any) {
+      console.log("Catch block hit:", error);
+      setServerError(error.message);
+    } finally {
+      setLoading(false);
+    }
   };
 
   useEffect(() => {
@@ -75,12 +101,15 @@ function LoginUserForm() {
           </Link>
         </p>
       </div>
+      {serverError && (
+        <div className="neo-error neo-error-animate">{serverError}</div>
+      )}
       {/* Button */}
       <button
         type="submit"
         className="neo-button bg-button-1 hover-bg-button-1 ease-in-out font-bold"
       >
-        Login
+        {loading ? <Spinner /> : "Login"}
       </button>
     </form>
   );

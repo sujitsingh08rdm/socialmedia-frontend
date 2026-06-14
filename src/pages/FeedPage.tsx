@@ -6,8 +6,10 @@ import { logoutUser } from "../api/auth.api";
 import { toast } from "react-toastify";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import Navbar from "../components/General/Navbar";
+import Sidebar from "../components/General/Sidebar";
 
-function HomePage() {
+function FeedPage() {
   const user = useSelector((state: RootState) => state.auth.user);
   const { loading } = useSelector((state: RootState) => state.auth);
   const [serverError, setServerError] = useState<string | null>(null);
@@ -36,22 +38,16 @@ function HomePage() {
   }
 
   return (
-    <div className="bg-primary min-h-screen flex flex-col items-center gap-6 pt-10">
-      {user ? (
-        <div className="w-full md:w-1/2 neo-card bg-secondary">
-          <h2>{user?.username}</h2>
-          <button
-            onClick={handleLogout}
-            className="neo-button bg-button-1 hover-bg-button-1 ease-in-out font-bold"
-          >
-            Logout
-          </button>
+    <div className="bg-primary min-h-screen">
+      <Navbar />
+      <div className="container flex">
+        <Sidebar />
+        <div>
+          <h1>This is the feed page</h1>
         </div>
-      ) : (
-        <h2>You are not logged in</h2>
-      )}
+      </div>
     </div>
   );
 }
 
-export default HomePage;
+export default FeedPage;

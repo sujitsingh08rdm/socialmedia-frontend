@@ -3,13 +3,13 @@ import RegisterPage from "./pages/RegisterPage";
 import LoginPage from "./pages/LoginPage";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import HomePage from "./pages/HomePage";
 import { useDispatch } from "react-redux";
 import { useEffect } from "react";
 import { getCurrentUser } from "./api/auth.api";
 import { setUser, setAuthLoad } from "./store/slices/auth.slice";
 import ProctectedRoute from "./routes/ProctectedRoute";
 import PublicRoute from "./routes/PublicRoute";
+import FeedPage from "./pages/FeedPage";
 
 function App() {
   const dispatch = useDispatch();
@@ -35,7 +35,7 @@ function App() {
           index
           element={
             <ProctectedRoute>
-              <HomePage />
+              <FeedPage />
             </ProctectedRoute>
           }
         />

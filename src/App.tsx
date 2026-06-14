@@ -8,6 +8,8 @@ import { useDispatch } from "react-redux";
 import { useEffect } from "react";
 import { getCurrentUser } from "./api/auth.api";
 import { setUser, setAuthLoad } from "./store/slices/auth.slice";
+import ProctectedRoute from "./routes/ProctectedRoute";
+import PublicRoute from "./routes/PublicRoute";
 
 function App() {
   const dispatch = useDispatch();
@@ -16,7 +18,6 @@ function App() {
     const loadUser = async () => {
       try {
         const response = await getCurrentUser();
-        console.log({ response }, "from app");
 
         dispatch(setUser(response.data));
       } catch (error) {
@@ -28,14 +29,35 @@ function App() {
   }, [dispatch]);
 
   return (
-    <>
+    <div className="bg-primary h-screen">
       <Routes>
-        <Route index element={<HomePage />} />
-        <Route path="/register" element={<RegisterPage />} />
-        <Route path="/login" element={<LoginPage />} />
+        <Route
+          index
+          element={
+            <ProctectedRoute>
+              <HomePage />
+            </ProctectedRoute>
+          }
+        />
+        <Route
+          path="/register"
+          element={
+            <PublicRoute>
+              <RegisterPage />
+            </PublicRoute>
+          }
+        />
+        <Route
+          path="/login"
+          element={
+            <PublicRoute>
+              <LoginPage />
+            </PublicRoute>
+          }
+        />
       </Routes>
       <ToastContainer />
-    </>
+    </div>
   );
 }
 

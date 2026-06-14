@@ -50,7 +50,7 @@
   }
 
   .neo-file-display {
-    @apply border-2 border-black px-2 py-1 text-sm min-w-[180px] shadow-[2px_2px_0px_#000];
+    @apply border-2 border-black px-2 py-1 text-sm shadow-[2px_2px_0px_#000];
   }
 
   .neo-file-btn {

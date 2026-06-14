@@ -53,3 +53,8 @@ export const getCurrentUser = async () => {
   const response = await api.get("/users/current-user");
   return response.data;
 };
+
+export const logoutUser = async () => {
+  const response = await api.get("/users/logout");
+  return response.data;
+};

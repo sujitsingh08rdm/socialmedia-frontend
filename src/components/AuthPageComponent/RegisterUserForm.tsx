@@ -37,9 +37,10 @@ function RegisterUserForm() {
       setServerError(null);
 
       const response = await registerUser(data);
-      dispatch(setUser(response.data.user));
+
       toast.success("Account created successfully");
       reset();
+
       navigate("/login");
     } catch (error: any) {
       setServerError(error.message);
@@ -120,9 +121,9 @@ function RegisterUserForm() {
       </div>
 
       {/* File Upload */}
-      <div className="flex justify-between items-start gap-4">
-        <div className="flex flex-col w-1/2">
-          <div className="neo-file bg-accent-2">
+      <div className="flex flex-col lg:flex-row justify-between items-start gap-4">
+        <div className="w-full lg:flex-1 min-w-0">
+          <div className="neo-file w-full bg-accent-2">
             <input
               // {...register("profileImage")}
               onChange={(e) => {
@@ -143,10 +144,14 @@ function RegisterUserForm() {
               id="fileInput"
               className="hidden"
             />
-            <div className="neo-file-display  truncate"> {fileName}</div>
-            <label htmlFor="fileInput" className="neo-file-btn">
-              Upload Image
-            </label>
+            <div className="flex w-full flex-row gap-2">
+              <div className="neo-file-display flex-1  min-w-0 truncate">
+                {fileName}
+              </div>
+              <label htmlFor="fileInput" className="neo-file-btn sm:w-auto">
+                Upload Image
+              </label>
+            </div>
           </div>
           {errors.profileImage && (
             <p className={`neo-error mt-1 neo-error-animate`}>
@@ -154,16 +159,14 @@ function RegisterUserForm() {
             </p>
           )}
         </div>
-        <div className="neo-container p-4 bg-accent-2 max-w-1/2">
-          <p className="">
-            <span>Already have an account </span>
-            <Link
-              className="text-blue-400 font-bold hover:font-extrabold hover:text-blue-600"
-              to={"/login"}
-            >
-              Login here
-            </Link>
-          </p>
+        <div className="neo-container bg-accent-2 flex-1 whitespace-nowrap p-4">
+          <span>Already have an account </span>
+          <Link
+            className="text-blue-400 font-bold hover:font-extrabold hover:text-blue-600"
+            to={"/login"}
+          >
+            Login here
+          </Link>
         </div>
       </div>
 

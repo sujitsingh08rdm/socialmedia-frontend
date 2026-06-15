@@ -29,7 +29,7 @@ function App() {
   }, [dispatch]);
 
   return (
-    <div className="bg-primary h-screen">
+    <div className="bg-primary min-h-screen">
       <Routes>
         <Route
           index

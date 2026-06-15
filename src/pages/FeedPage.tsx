@@ -48,28 +48,30 @@ function FeedPage() {
   }
 
   return (
-    <div className="bg-primary min-h-screen">
+    <div className="bg-primary overflow-hidden flex flex-col h-screen">
       <Navbar />
-      <div className="p-1 flex w-full overflow-x-hidden">
+      <div className="flex flex-1 p-1 w-full overflow-hidden">
         <Sidebar />
 
-        {loadingPosts ? (
-          <div className="flex-1 flex justify-center items-center min-h-[60vh]">
-            <Spinner size={48} />
-          </div>
-        ) : feedPosts.length === 0 ? (
-          <div className="flex-1 flex justify-center items-start mt-8 min-h-[60vh]">
-            <p className="text-2xl font-medium neo-card bg-secondary">
-              No posts found..
-            </p>
-          </div>
-        ) : (
-          <div>
-            {feedPosts.map((feedPost) => (
-              <FeedPost key={feedPost._id} post={feedPost} />
-            ))}
-          </div>
-        )}
+        <div className="flex-1 feed-scroll overflow-y-auto px-4">
+          {loadingPosts ? (
+            <div className="flex-1 flex justify-center items-center min-h-[60vh]">
+              <Spinner size={48} />
+            </div>
+          ) : feedPosts.length === 0 ? (
+            <div className="flex-1 overflow-y-auto flex justify-center items-start mt-8 min-h-[60vh]">
+              <p className="text-2xl font-medium neo-card bg-secondary">
+                No posts found..
+              </p>
+            </div>
+          ) : (
+            <div className="">
+              {feedPosts.map((feedPost) => (
+                <FeedPost key={feedPost._id} post={feedPost} />
+              ))}
+            </div>
+          )}
+        </div>
         <Chatbar />
       </div>
     </div>

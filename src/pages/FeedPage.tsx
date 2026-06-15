@@ -1,33 +1,46 @@
 import { useDispatch, useSelector } from "react-redux";
 import { type RootState } from "../store/store";
 import Spinner from "../components/General/Spinner";
-import { logout } from "../store/slices/auth.slice";
-import { logoutUser } from "../api/auth.api";
 import { toast } from "react-toastify";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Navbar from "../components/General/Navbar";
 import Sidebar from "../components/General/Sidebar";
+import Chatbar from "../components/General/Chatbar";
+import FeedSection from "../components/FeedPageComponent/FeedSection";
+import { getFeedPost } from "../api/feed.api";
+import type { FeedPostType } from "../types/feed";
+import FeedPost from "../components/FeedPageComponent/FeedPost";
 
 function FeedPage() {
-  const user = useSelector((state: RootState) => state.auth.user);
   const { loading } = useSelector((state: RootState) => state.auth);
   const [serverError, setServerError] = useState<string | null>(null);
+  const [loadingPosts, setLoadingPosts] = useState(false);
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const [feedPosts, setFeedPosts] = useState<FeedPost[]>([]);
 
-  const handleLogout = async () => {
-    try {
-      const response = await logoutUser();
+  useEffect(() => {
+    const getPosts = async () => {
+      try {
+        setLoadingPosts(true);
+        const posts = await getFeedPost();
 
-      toast.success(response.message);
-      dispatch(logout());
-      navigate("/login", { replace: true });
-    } catch (error: any) {
-      setServerError(error.message);
-      toast.error(error.message);
-    }
-  };
+        setFeedPosts(posts);
+      } catch (error: any) {
+        setServerError(error.message);
+        toast.error(error.message || "Failed to load feed", {
+          toastId: "feed-error",
+        });
+      } finally {
+        setLoadingPosts(false);
+      }
+    };
+
+    getPosts();
+  }, []);
+
+  console.log(feedPosts);
 
   if (loading) {
     return (
@@ -40,11 +53,21 @@ function FeedPage() {
   return (
     <div className="bg-primary min-h-screen">
       <Navbar />
-      <div className="container flex">
+      <div className="p-1 flex w-full overflow-x-hidden">
         <Sidebar />
-        <div>
-          <h1>This is the feed page</h1>
-        </div>
+
+        {loadingPosts ? (
+          <div className="flex-1 flex justify-center items-center min-h-[60vh]">
+            <Spinner size={48} />
+          </div>
+        ) : feedPosts.length === 0 ? (
+          <p>No posts found..</p>
+        ) : (
+          feedPosts.map((feedPost) => (
+            <FeedPost key={feedPost._id} post={feedPost} />
+          ))
+        )}
+        <Chatbar />
       </div>
     </div>
   );

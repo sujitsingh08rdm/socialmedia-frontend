@@ -6,7 +6,7 @@ interface FeedPostProps {
 
 function FeedPost({ post }: FeedPostProps) {
   return (
-    <section className="p-2 neo-container bg-secondary feed-section min-w-[60vw] border-r-2 border-violet-800 shadow-indigo-900 shadow-xs">
+    <section className="px-3 neo-container bg-secondary feed-section min-w-[60vw] border-r-2 border-violet-800 shadow-indigo-900 shadow-xs">
       <div className="flex neo-card bg-accent-2 items-center gap-3">
         <img
           src={post.owner.profileImage}

@@ -7,7 +7,6 @@ import { useNavigate } from "react-router-dom";
 import Navbar from "../components/General/Navbar";
 import Sidebar from "../components/General/Sidebar";
 import Chatbar from "../components/General/Chatbar";
-import FeedSection from "../components/FeedPageComponent/FeedSection";
 import { getFeedPost } from "../api/feed.api";
 import type { FeedPostType } from "../types/feed";
 import FeedPost from "../components/FeedPageComponent/FeedPost";

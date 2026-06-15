@@ -1,9 +1,8 @@
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { type RootState } from "../store/store";
 import Spinner from "../components/General/Spinner";
 import { toast } from "react-toastify";
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
 import Navbar from "../components/General/Navbar";
 import Sidebar from "../components/General/Sidebar";
 import Chatbar from "../components/General/Chatbar";
@@ -15,9 +14,8 @@ function FeedPage() {
   const { loading } = useSelector((state: RootState) => state.auth);
   const [serverError, setServerError] = useState<string | null>(null);
   const [loadingPosts, setLoadingPosts] = useState(false);
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
-  const [feedPosts, setFeedPosts] = useState<FeedPost[]>([]);
+
+  const [feedPosts, setFeedPosts] = useState<FeedPostType[]>([]);
 
   useEffect(() => {
     const getPosts = async () => {
@@ -60,11 +58,17 @@ function FeedPage() {
             <Spinner size={48} />
           </div>
         ) : feedPosts.length === 0 ? (
-          <p>No posts found..</p>
+          <div className="flex-1 flex justify-center items-start mt-8 min-h-[60vh]">
+            <p className="text-2xl font-medium neo-card bg-secondary">
+              No posts found..
+            </p>
+          </div>
         ) : (
-          feedPosts.map((feedPost) => (
-            <FeedPost key={feedPost._id} post={feedPost} />
-          ))
+          <div>
+            {feedPosts.map((feedPost) => (
+              <FeedPost key={feedPost._id} post={feedPost} />
+            ))}
+          </div>
         )}
         <Chatbar />
       </div>

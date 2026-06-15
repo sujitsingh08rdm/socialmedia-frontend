@@ -26,6 +26,6 @@ export interface FeedPostType {
   likes: string[];
   createdAt: string;
   uploadedAt: string;
-  commentsCount: number;
-  likesCount: number;
+  commentCount: number;
+  likeCount: number;
 }

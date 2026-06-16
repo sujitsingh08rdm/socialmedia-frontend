@@ -6,6 +6,7 @@ import { useState } from "react";
 import { toast } from "react-toastify";
 import { toggleLikePost } from "../../api/like.api";
 import { Heart, MessageCircle } from "lucide-react";
+import { Link } from "react-router-dom";
 
 interface FeedPostProps {
   post: FeedPostType;
@@ -36,7 +37,6 @@ function FeedPost({ post }: FeedPostProps) {
       }
 
       await toggleLikePost(post._id);
-      console.log("API success");
     } catch (error: any) {
       toast.error(error.message || "Failed to toggle like");
       if (isLikedByMe) {
@@ -51,17 +51,20 @@ function FeedPost({ post }: FeedPostProps) {
     }
   };
 
-  console.log(post);
-
   return (
     <section className="px-8 py-6 border-b-2 mb-8 neo-container bg-secondary feed-section min-w-[60vw] border-r-2 border-violet-800 shadow-indigo-900 shadow-xs">
-      <div className="flex neo-card bg-accent-2 items-center gap-3">
-        <img
-          src={post.owner.profileImage || defaultImage}
-          alt={post.owner.username}
-          className="aspect-square w-10 h-10 rounded-full object-cover"
-        />
-        <p className="font-semibold">{post.owner.username}</p>
+      <div className="flex neo-card bg-accent-2 items-center">
+        <Link
+          to={`/profile/${user?.username}`}
+          className="flex bg-accent-2 items-center gap-3"
+        >
+          <img
+            src={post.owner.profileImage || defaultImage}
+            alt={post.owner.username}
+            className="aspect-square w-10 h-10 rounded-full object-cover"
+          />
+          <p className="font-semibold">{post.owner.username}</p>
+        </Link>{" "}
       </div>
       <div className="neo-card bg-accent-1 mt-2">
         <div className="neo-card bg-accent-2">

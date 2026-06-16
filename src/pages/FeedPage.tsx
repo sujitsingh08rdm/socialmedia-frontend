@@ -37,8 +37,6 @@ function FeedPage() {
     getPosts();
   }, []);
 
-  console.log(feedPosts);
-
   if (loading) {
     return (
       <div className="fixed inset-0 flex items-center justify-center bg-primary z-50">

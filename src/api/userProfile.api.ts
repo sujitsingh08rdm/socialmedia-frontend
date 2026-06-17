@@ -8,6 +8,6 @@ export const getUserProfileInfo = async (username: string) => {
 
 export const getUserProfilePosts = async (username: string) => {
   const response = await api.get(`/posts/user-posts/${username}`);
-  console.log("user posts -> ", response.data.data);
+
   return response.data.data;
 };

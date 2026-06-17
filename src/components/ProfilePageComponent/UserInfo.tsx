@@ -7,8 +7,6 @@ interface UserInfoProps {
 }
 
 function UserInfo({ user }: UserInfoProps) {
-  console.log(user);
-
   return (
     <div className="neo-container bg-accent-1 p-4">
       <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">

@@ -8,6 +8,7 @@ import {
 import { useParams } from "react-router-dom";
 import Spinner from "../General/Spinner";
 import UserPosts from "../ProfilePageComponent/UserPosts";
+import type { UserPostType } from "../../types/userpost";
 
 function UserProfileContainer() {
   const [userProfileInfo, setUserProfileInfo] =
@@ -15,7 +16,7 @@ function UserProfileContainer() {
   const { username } = useParams<{ username: string }>();
   const [loading, setLoading] = useState<boolean>(true);
   const [postLoading, setPostLoading] = useState<boolean>(true);
-  const [userPosts, setUserPosts] = useState(null);
+  const [userPosts, setUserPosts] = useState<UserPostType[]>([]);
 
   useEffect(() => {
     if (!username) return;
@@ -37,7 +38,6 @@ function UserProfileContainer() {
       try {
         if (!username) return;
         const response = await getUserProfilePosts(username);
-        console.log("from use effect -> ", response);
 
         setUserPosts(response);
       } catch (error) {
@@ -63,9 +63,10 @@ function UserProfileContainer() {
   }
 
   return (
-    <div className="min-w-[63vw] flex flex-col">
+    <div className="min-w-[63vw] p-2 flex flex-col user-profile-scroll overflow-y-auto">
       <UserInfo user={userProfileInfo} />
-      <UserPosts userPosts={userPosts} />
+
+      {postLoading ? <Spinner /> : <UserPosts userPosts={userPosts} />}
     </div>
   );
 }

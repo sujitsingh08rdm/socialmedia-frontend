@@ -55,7 +55,7 @@ function FeedPost({ post }: FeedPostProps) {
     <section className="px-8 py-6 border-b-2 mb-8 neo-container bg-secondary feed-section min-w-[60vw] border-r-2 border-violet-800 shadow-indigo-900 shadow-xs">
       <div className="flex neo-card bg-accent-2 items-center">
         <Link
-          to={`/profile/${user?.username}`}
+          to={`/profile/${post.owner?.username}`}
           className="flex bg-accent-2 items-center gap-3"
         >
           <img
@@ -64,7 +64,7 @@ function FeedPost({ post }: FeedPostProps) {
             className="aspect-square w-10 h-10 rounded-full object-cover"
           />
           <p className="font-semibold">{post.owner.username}</p>
-        </Link>{" "}
+        </Link>
       </div>
       <div className="neo-card bg-accent-1 mt-2">
         <div className="neo-card bg-accent-2">
@@ -73,7 +73,7 @@ function FeedPost({ post }: FeedPostProps) {
             <img
               src={post.image}
               alt="post"
-              className="mt-3 rounded-lg max-h-[400px] object-cover"
+              className="mt-3 rounded-lg max-h-100 object-cover"
             />
           )}
         </div>

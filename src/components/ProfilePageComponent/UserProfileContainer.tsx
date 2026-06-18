@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import UserInfo from "./UserInfo";
 import type { userProfileInfoType } from "../../types/userprofile";
 import {

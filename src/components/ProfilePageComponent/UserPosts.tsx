@@ -1,4 +1,3 @@
-import React from "react";
 import type { UserPostType } from "../../types/userpost";
 import UserPost from "./UserPost";
 
@@ -7,9 +6,6 @@ interface Props {
 }
 
 function UserPosts({ userPosts }: Props) {
-  console.log("userPosts", userPosts);
-  console.log("UserPosts rendered");
-
   if (!userPosts || userPosts.length === 0) {
     return (
       <div className="mt-3 neo-container bg-secondary font-medium flex items-center justify-center">

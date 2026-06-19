@@ -7,6 +7,7 @@ import { toast } from "react-toastify";
 import { toggleLikePost } from "../../api/like.api";
 import { Heart, MessageCircle } from "lucide-react";
 import { Link } from "react-router-dom";
+import Spinner from "../General/Spinner";
 
 interface FeedPostProps {
   post: FeedPostType;
@@ -14,8 +15,10 @@ interface FeedPostProps {
 
 function FeedPost({ post }: FeedPostProps) {
   const user = useSelector((state: RootState) => state.auth.user);
+  const [profileLoading, setProfileLoading] = useState(true);
+  const [postImageLoading, setPostImageLoading] = useState(!!post.image);
   const [likes, setLikes] = useState<string[]>(post.likes);
-  const [likeCount, setLikesCount] = useState<number>(post.likeCount);
+  const [likeCount, setLikeCount] = useState<number>(post.likeCount);
   const [loading, setLoading] = useState(false);
 
   const isLikedByMe = user ? likes.includes(user._id) : false;
@@ -30,10 +33,10 @@ function FeedPost({ post }: FeedPostProps) {
       setLoading(true);
       if (isLikedByMe) {
         setLikes((prev) => prev.filter((id) => id !== user._id));
-        setLikesCount((prev) => prev - 1);
+        setLikeCount((prev) => prev - 1);
       } else {
         setLikes((prev) => [...prev, user._id]);
-        setLikesCount((prev) => prev + 1);
+        setLikeCount((prev) => prev + 1);
       }
 
       await toggleLikePost(post._id);
@@ -41,10 +44,10 @@ function FeedPost({ post }: FeedPostProps) {
       toast.error(error.message || "Failed to toggle like");
       if (isLikedByMe) {
         setLikes((prev) => [...prev, user._id]);
-        setLikesCount((prev) => prev + 1);
+        setLikeCount((prev) => prev + 1);
       } else {
         setLikes((prev) => prev.filter((id) => id !== user._id));
-        setLikesCount((prev) => prev - 1);
+        setLikeCount((prev) => prev - 1);
       }
     } finally {
       setLoading(false);
@@ -58,10 +61,16 @@ function FeedPost({ post }: FeedPostProps) {
           to={`/profile/${post.owner?.username}`}
           className="flex bg-accent-2 items-center gap-3"
         >
+          {profileLoading && <Spinner />}
+
           <img
             src={post.owner.profileImage || defaultImage}
             alt={post.owner.username}
-            className="aspect-square w-10 h-10 rounded-full object-cover"
+            onLoad={() => setProfileLoading(false)}
+            onError={() => setProfileLoading(false)}
+            className={`aspect-square w-10 h-10 rounded-full object-cover ${
+              profileLoading ? "opacity-0" : "opacity-100"
+            }`}
           />
           <p className="font-semibold">{post.owner.username}</p>
         </Link>
@@ -70,11 +79,18 @@ function FeedPost({ post }: FeedPostProps) {
         <div className="neo-card bg-accent-2">
           <p className="mt-3">{post.content}</p>
           {post.image && (
-            <img
-              src={post.image}
-              alt="post"
-              className="mt-3 rounded-lg max-h-100 object-cover"
-            />
+            <>
+              {postImageLoading && <Spinner />}
+              <img
+                src={post.image}
+                alt="post"
+                onLoad={() => setPostImageLoading(false)}
+                onError={() => setPostImageLoading(false)}
+                className={`mt-3 rounded-lg max-h-100 object-cover transition-opacity duration-300 ${
+                  postImageLoading ? "opacity-0" : "opacity-100"
+                }`}
+              />
+            </>
           )}
         </div>
 

@@ -7,14 +7,21 @@ interface Props {
 }
 
 function UserPosts({ userPosts }: Props) {
-  if (!userPosts.length) {
-    return <div className="text-zinc-400 text-center">no posts yet.</div>;
+  console.log("userPosts", userPosts);
+  console.log("UserPosts rendered");
+
+  if (!userPosts || userPosts.length === 0) {
+    return (
+      <div className="mt-3 neo-container bg-secondary font-medium flex items-center justify-center">
+        no posts yet.
+      </div>
+    );
   }
 
   return (
     <div className="space-y-6 ">
       {userPosts.map((post) => (
-        <UserPost post={post} />
+        <UserPost key={post._id} post={post} />
       ))}
     </div>
   );

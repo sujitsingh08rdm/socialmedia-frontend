@@ -7,6 +7,9 @@ import type { RootState } from "../../store/store";
 import { toast } from "react-toastify";
 import { toggleLikePost } from "../../api/like.api";
 import Spinner from "../General/Spinner";
+import CommentSection from "../General/CommentSection";
+import type { CommentType } from "../../types/comment";
+import { getCommentsByPostId } from "../../api/comment.api";
 
 interface Props {
   post: UserPostType;
@@ -23,6 +26,11 @@ export default function UserPost({ post }: Props) {
   const [loading, setLoading] = useState(false);
 
   const isLikedByMe = user ? likes.includes(user._id) : false;
+
+  const [showComments, setShowComments] = useState<boolean>(false);
+  const [comments, setComments] = useState<CommentType[]>([]);
+  const [loadingComments, setLoadingComments] = useState<boolean>(false);
+  const [commentCount, setCommentCount] = useState(post.commentCount);
 
   const handleToggleLike = async () => {
     if (!user) {
@@ -50,6 +58,27 @@ export default function UserPost({ post }: Props) {
       }
     } finally {
       setLoading(false);
+    }
+  };
+
+  const fetchComments = async () => {
+    try {
+      setLoadingComments(true);
+      const data = await getCommentsByPostId(post._id);
+
+      setComments(data);
+    } catch (error: any) {
+      toast.error("failed to load comments");
+    } finally {
+      setLoadingComments(false);
+    }
+  };
+
+  const handleToggleComments = () => {
+    setShowComments((prev) => !prev);
+
+    if (!showComments) {
+      fetchComments();
     }
   };
 
@@ -103,15 +132,23 @@ export default function UserPost({ post }: Props) {
             </button>
           </div>
 
-          <div className="flex items-center gap-1 text-blue-500 hover:text-blue-700">
-            <button>
-              <MessageCircle size={20} className="cursor-pointer" />
+          <div className="flex items-center gap-1 text-blue-500 ">
+            <button onClick={handleToggleComments}>
+              <MessageCircle
+                size={20}
+                className={`cursor-pointer transition hover:text-blue-900 ${showComments ? "fill-blue-500 text-blue-500" : "text-blue-500"}`}
+              />
             </button>
-            <span className="font-medium text-gray-700">
-              {post.commentCount}
-            </span>
+            <span className="font-medium text-gray-700">{commentCount}</span>
           </div>
         </div>
+        {showComments && (
+          <CommentSection
+            key={post._id}
+            post={post}
+            setCommentCount={setCommentCount}
+          />
+        )}
       </div>
     </section>
   );

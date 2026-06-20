@@ -5,7 +5,7 @@ import { logoutUser } from "../../api/auth.api";
 import { toast } from "react-toastify";
 import { logout } from "../../store/slices/auth.slice";
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Spinner from "./Spinner";
 
 function Navbar() {
@@ -29,9 +29,12 @@ function Navbar() {
 
   return (
     <nav className="flex px-6 py-2 justify-between items-center border-b-2 border-indigo-800 md:px-12 md:py-4 sticky shadow-indigo-900 shadow-xs">
-      <h1 className="text-2xl 2xl md:text-4xl font-black text-black neo-card bg-accent-1 inline-block">
+      <Link
+        to="/"
+        className="text-2xl 2xl md:text-4xl font-black text-black neo-card bg-accent-1 inline-block"
+      >
         bingeHub
-      </h1>
+      </Link>
       <div className="neo-container w-auto bg-accent-2 flex flex-row items-center">
         <div className="p-1 md:p-2 gap-2 w-auto bg-accent-2 flex items-center justify-center">
           <img

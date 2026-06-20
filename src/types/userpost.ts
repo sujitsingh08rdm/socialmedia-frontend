@@ -1,31 +1,30 @@
-export interface FeedOwner {
+export interface PostOwner {
   _id: string;
   username: string;
-  profileImage: string;
+  profileImage?: string;
 }
 
-export interface CommentedBy {
+export interface PostCommentedBy {
   _id: string;
   username: string;
-  profileImage: string;
+  profileImage?: string;
 }
 
-export interface FeedComment {
+export interface PostComment {
   _id: string;
   comment: string;
   createdAt: string;
-  commentedBy: CommentedBy;
+  commentedBy: PostCommentedBy;
 }
 
-export interface FeedPostType {
+export interface UserPostType {
   _id: string;
   content: string;
   image?: string;
-  owner: FeedOwner;
-  comments: FeedComment[];
+  owner: PostOwner;
+  comments: PostComment[];
   likes: string[];
   createdAt: string;
-  updatedAt: string;
   commentCount: number;
   likeCount: number;
 }

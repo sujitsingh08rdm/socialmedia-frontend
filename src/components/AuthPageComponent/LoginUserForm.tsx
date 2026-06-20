@@ -30,7 +30,6 @@ function LoginUserForm() {
       setLoading(true);
       setServerError(null);
       const response = await loginUser(data);
-      console.log(response.data, "from loggin in");
 
       dispatch(setUser(response.data.user));
       toast.success(response.message);

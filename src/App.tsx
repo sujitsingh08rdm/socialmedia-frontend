@@ -10,6 +10,7 @@ import { setUser, setAuthLoad } from "./store/slices/auth.slice";
 import ProctectedRoute from "./routes/ProctectedRoute";
 import PublicRoute from "./routes/PublicRoute";
 import FeedPage from "./pages/FeedPage";
+import ProfilePage from "./pages/ProfilePage";
 
 function App() {
   const dispatch = useDispatch();
@@ -29,13 +30,21 @@ function App() {
   }, [dispatch]);
 
   return (
-    <div className="bg-primary h-screen">
+    <div className="bg-primary min-h-screen">
       <Routes>
         <Route
           index
           element={
             <ProctectedRoute>
               <FeedPage />
+            </ProctectedRoute>
+          }
+        />
+        <Route
+          path="/profile/:username"
+          element={
+            <ProctectedRoute>
+              <ProfilePage />
             </ProctectedRoute>
           }
         />

@@ -18,8 +18,30 @@ function UserProfileContainer() {
   const [postLoading, setPostLoading] = useState<boolean>(true);
   const [userPosts, setUserPosts] = useState<UserPostType[]>([]);
 
-  useEffect(() => {
+  const refetchProfile = async () => {
     if (!username) return;
+    try {
+      const userProfileInfo = await getUserProfileInfo(username);
+      setUserProfileInfo(userProfileInfo);
+    } catch (error) {
+      console.log("Failed to fetch Profile", error);
+    }
+  };
+
+  // useEffect(() => {
+  //   const init = async () => {
+  //     setLoading(true);
+  //     await refetchProfile();
+  //     setLoading(false);
+  //   };
+  //   init();
+  // }, [username]);
+
+  useEffect(() => {
+    if (!username) {
+      setLoading(false);
+      return;
+    }
     const getUserProfileData = async () => {
       try {
         const userProfileInfo = await getUserProfileInfo(username);
@@ -36,7 +58,10 @@ function UserProfileContainer() {
   useEffect(() => {
     const getUserPosts = async () => {
       try {
-        if (!username) return;
+        if (!username) {
+          setPostLoading(false);
+          return;
+        }
         const response = await getUserProfilePosts(username);
 
         setUserPosts(response);
@@ -48,7 +73,7 @@ function UserProfileContainer() {
     };
 
     getUserPosts();
-  }, []);
+  }, [username]);
 
   if (loading) {
     return (
@@ -64,7 +89,7 @@ function UserProfileContainer() {
 
   return (
     <div className="min-w-[63vw] p-2 flex flex-col user-profile-scroll overflow-y-auto">
-      <UserInfo user={userProfileInfo} />
+      <UserInfo user={userProfileInfo} refetchProfile={refetchProfile} />
 
       {postLoading ? <Spinner /> : <UserPosts userPosts={userPosts} />}
     </div>

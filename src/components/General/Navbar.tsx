@@ -38,7 +38,7 @@ function Navbar() {
       <div className="neo-container w-auto bg-accent-2 flex flex-row items-center">
         <div className="p-1 md:p-2 gap-2 w-auto bg-accent-2 flex items-center justify-center">
           <img
-            className="w-[48px] border-2 border-primary aspect-square rounded-full bg-cover"
+            className="w-[48px] border-2 border-primary aspect-square rounded-full bg-cover object-cover"
             src={user?.profileImage ? user?.profileImage : defaultImage}
           />
           <span className="text-black font-medium">{user?.username}</span>

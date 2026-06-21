@@ -56,9 +56,7 @@ function RegisterUserForm() {
       clearErrors();
     }, 3000);
 
-    return () => {
-      clearTimeout(timer);
-    };
+    return () => clearTimeout(timer);
   }, [errors, clearErrors]);
 
   return (

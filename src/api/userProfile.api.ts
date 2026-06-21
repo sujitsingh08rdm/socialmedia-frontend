@@ -23,3 +23,30 @@ export const unFollowUser = async (username: string) => {
 
   return response.data;
 };
+
+export const updateProfileImage = async (formData: FormData) => {
+  const response = await api.patch(`/users/update-profile-image`, formData, {
+    headers: { "Content-Type": "multipart/form-data" },
+  });
+  console.log(response);
+
+  return response.data;
+};
+
+export const addBio = async (bio: string) => {
+  const response = await api.post("/users/add-bio", { bio });
+
+  return response.data;
+};
+
+export const updateBio = async (updatedBio: string) => {
+  const response = await api.patch("/users/update-bio", { updatedBio });
+
+  return response.data;
+};
+
+export const deleteBio = async () => {
+  const response = await api.delete("/users/delete-bio");
+
+  return response.data;
+};

@@ -87,11 +87,15 @@ export default function UserPost({ post }: Props) {
       <div className="neo-card items-center bg-accent-1 flex gap-3">
         {profileLoading && <Spinner />}
         <img
-          src={post.owner.profileImage || defaultImage}
+          src={
+            post.owner._id === user?._id
+              ? user.profileImage
+              : post.owner.profileImage
+          }
           alt={post.owner.username}
           onLoad={() => setProfileLoading(false)}
           onError={() => setProfileLoading(false)}
-          className={`w-8 h-8 md:w-10 md:h-10 rounded-full border-4 border-black object-cover bg-white ${
+          className={`w-8 h-8 md:w-10 md:h-10 rounded-full border-2 border-black object-cover bg-white ${
             profileLoading ? "opacity-0" : "opacity-100"
           }`}
         />

@@ -1,7 +1,7 @@
 import type { UserPostType } from "../../types/userpost";
 import defaultImage from "../../assets/default-profileImage.png";
 import { Heart, MessageCircle } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useSelector } from "react-redux";
 import type { RootState } from "../../store/store";
 import { toast } from "react-toastify";
@@ -31,6 +31,13 @@ export default function UserPost({ post }: Props) {
   const [comments, setComments] = useState<CommentType[]>([]);
   const [loadingComments, setLoadingComments] = useState<boolean>(false);
   const [commentCount, setCommentCount] = useState(post.commentCount);
+
+  const [expanded, setExpanded] = useState<boolean>(false);
+  const contentRef = useRef<HTMLDivElement | null>(null);
+  const [isOverflowing, setIsOverflowing] = useState<boolean>(false);
+
+  // console.log(user, "<- user");
+  // console.log(post, "<- post");
 
   const handleToggleLike = async () => {
     if (!user) {
@@ -82,6 +89,13 @@ export default function UserPost({ post }: Props) {
     }
   };
 
+  useEffect(() => {
+    if (contentRef.current) {
+      const el = contentRef.current;
+      setIsOverflowing(el.scrollHeight > el.clientHeight);
+    }
+  }, [post.content]);
+
   return (
     <section className="mt-3 neo-container bg-secondary">
       <div className="neo-card items-center bg-accent-1 flex gap-3">
@@ -89,8 +103,8 @@ export default function UserPost({ post }: Props) {
         <img
           src={
             post.owner._id === user?._id
-              ? user.profileImage
-              : post.owner.profileImage
+              ? user?.profileImage || defaultImage
+              : post.owner.profileImage || defaultImage
           }
           alt={post.owner.username}
           onLoad={() => setProfileLoading(false)}
@@ -103,7 +117,10 @@ export default function UserPost({ post }: Props) {
       </div>
 
       <div className="neo-card bg-accent-2 flex flex-col gap-3 mt-1">
-        <p className="font-semibold whitespace-pre-wrap">{post.content}</p>
+        {/* <div
+          className="prose prose-invert font-semibold whitespace-pre-wrap"
+          dangerouslySetInnerHTML={{ __html: post.content }}
+        /> */}
 
         {post.image && (
           <>
@@ -119,6 +136,23 @@ export default function UserPost({ post }: Props) {
             />
           </>
         )}
+
+        <div className="relative mt-2">
+          <div
+            ref={contentRef}
+            className={`prose prose-invert font-semibold whitespace-pre-wrap max-w-none  transition-all duration-300 ${expanded ? "" : "line-clamp-3 overflow-hidden"}`}
+            dangerouslySetInnerHTML={{ __html: post.content }}
+          />
+          {isOverflowing && (
+            <button
+              onClick={() => setExpanded((prev) => !prev)}
+              className="mt-1 neo-button  text-sm cursor-pointer hover:underline"
+            >
+              {expanded ? "Show less" : "Show More"}
+            </button>
+          )}
+        </div>
+
         <div className="flex items-center gap-4">
           <div className="flex items-center gap-1 text-pink-500 hover:text-pink-700">
             <button

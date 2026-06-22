@@ -2,7 +2,7 @@ import type { FeedPostType } from "../../types/feed";
 import defaultImage from "../../assets/default-profileImage.png";
 import { useSelector } from "react-redux";
 import type { RootState } from "../../store/store";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { toast } from "react-toastify";
 import { toggleLikePost } from "../../api/like.api";
 import { Heart, MessageCircle } from "lucide-react";
@@ -28,6 +28,10 @@ function FeedPost({ post }: FeedPostProps) {
   const [comments, setComments] = useState<CommentType[]>([]);
   const [loadingComments, setLoadingComments] = useState<boolean>(false);
   const [commentCount, setCommentCount] = useState(post.commentCount);
+
+  const [expanded, setExpanded] = useState<boolean>(false);
+  const contentRef = useRef<HTMLDivElement | null>(null);
+  const [isOverflowing, setIsOverflowing] = useState<boolean>(false);
 
   const isLikedByMe = user ? likes.includes(user._id) : false;
 
@@ -83,6 +87,13 @@ function FeedPost({ post }: FeedPostProps) {
     }
   };
 
+  useEffect(() => {
+    if (contentRef.current) {
+      const el = contentRef.current;
+      setIsOverflowing(el.scrollHeight > el.clientHeight);
+    }
+  }, [post.content]);
+
   return (
     <section className="px-8 py-6 border-b-2 mb-8 neo-container bg-secondary feed-section min-w-[60vw] border-r-2 border-violet-800 shadow-indigo-900 shadow-xs">
       <div className="flex neo-card bg-accent-2 items-center">
@@ -106,7 +117,6 @@ function FeedPost({ post }: FeedPostProps) {
       </div>
       <div className="neo-card bg-accent-1 mt-2">
         <div className="neo-card bg-accent-2">
-          <p className="mt-3">{post.content}</p>
           {post.image && (
             <>
               {postImageLoading && <Spinner />}
@@ -115,12 +125,34 @@ function FeedPost({ post }: FeedPostProps) {
                 alt="post"
                 onLoad={() => setPostImageLoading(false)}
                 onError={() => setPostImageLoading(false)}
-                className={`mt-3 rounded-lg max-h-100 object-cover transition-opacity duration-300 ${
+                className={`mt-1 rounded-lg max-h-100 object-cover transition-opacity duration-300 ${
                   postImageLoading ? "opacity-0" : "opacity-100"
                 }`}
               />
             </>
           )}
+
+          {/* Post with read-more */}
+          <div className="relative mt-2">
+            <div
+              ref={contentRef}
+              className={`prose prose-invert font-semibold whitespace-pre-wrap max-w-none  transition-all duration-300 ${expanded ? "" : "line-clamp-3 overflow-hidden"}`}
+              dangerouslySetInnerHTML={{ __html: post.content }}
+            />
+            {isOverflowing && (
+              <button
+                onClick={() => setExpanded((prev) => !prev)}
+                className="mt-1 neo-button  text-sm cursor-pointer hover:underline"
+              >
+                {expanded ? "Show less" : "Show More"}
+              </button>
+            )}
+          </div>
+
+          {/* <div
+            className="prose prose-invert font-semibold whitespace-pre-wrap"
+            dangerouslySetInnerHTML={{ __html: post.content }}
+          /> */}
         </div>
 
         <div className="neo-card mt-3 bg-accent-2 px-4 py-3">
@@ -203,7 +235,7 @@ function FeedPost({ post }: FeedPostProps) {
         //           user?._id === comment.commentedBy._id ||
         //           user?._id === post.owner._id;
 
-        //         const visibleReplies = expandedReplies[comment._id] ?? 3;
+        //         const visibleReplies = expanded, [comment._id] ?? 3;
 
         //         const displayedReplies =
         //           comment.replies?.slice(0, visibleReplies) || [];

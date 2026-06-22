@@ -31,18 +31,21 @@ function Navbar() {
     <nav className="flex px-6 py-2 justify-between items-center border-b-2 border-indigo-800 md:px-12 md:py-4 sticky shadow-indigo-900 shadow-xs">
       <Link
         to="/"
-        className="text-2xl 2xl md:text-4xl font-black text-black neo-card bg-accent-1 inline-block"
+        className="text-2xl 2xl hover:scale-105 md:text-4xl font-black text-black neo-card bg-accent-1 inline-block"
       >
         bingeHub
       </Link>
       <div className="neo-container w-auto bg-accent-2 flex flex-row items-center">
-        <div className="p-1 md:p-2 gap-2 w-auto bg-accent-2 flex items-center justify-center">
+        <Link
+          className="p-1 hover:border-2 hover:rounded-full md:p-2 gap-2 w-auto bg-accent-2 flex items-center justify-center"
+          to={`/profile/${user?.username}`}
+        >
           <img
             className="w-[48px] border-2 border-primary aspect-square rounded-full bg-cover object-cover"
             src={user?.profileImage ? user?.profileImage : defaultImage}
           />
           <span className="text-black font-medium">{user?.username}</span>
-        </div>
+        </Link>{" "}
         <div className="p-1 md:p-2">
           <button
             type="submit"

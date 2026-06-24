@@ -6,9 +6,16 @@ export const getCommentsByPostId = async (postId: string) => {
   return response.data.data;
 };
 
-export const createComment = async (postId: string, comment: string) => {
+export const createComment = async (
+  postId: string,
+  comment: string,
+  parentComment?: string,
+  taggedUser?: string,
+) => {
   const response = await api.post(`/comments/create-comment/${postId}`, {
     comment,
+    parentComment,
+    taggedUser,
   });
 
   return response.data.data;

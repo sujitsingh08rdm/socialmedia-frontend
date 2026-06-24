@@ -56,9 +56,7 @@ function RegisterUserForm() {
       clearErrors();
     }, 3000);
 
-    return () => {
-      clearTimeout(timer);
-    };
+    return () => clearTimeout(timer);
   }, [errors, clearErrors]);
 
   return (
@@ -120,8 +118,8 @@ function RegisterUserForm() {
         )}
       </div>
 
-      {/* File Upload */}
       <div className="flex flex-col lg:flex-row justify-between items-start gap-4">
+        {/* File Upload */}
         <div className="w-full lg:flex-1 min-w-0">
           <div className="neo-file w-full bg-accent-2">
             <input

@@ -11,6 +11,8 @@ import ProctectedRoute from "./routes/ProctectedRoute";
 import PublicRoute from "./routes/PublicRoute";
 import FeedPage from "./pages/FeedPage";
 import ProfilePage from "./pages/ProfilePage";
+import UploadPostPage from "./pages/UploadPostPage";
+import EditPostPage from "./pages/EditPostPage";
 
 function App() {
   const dispatch = useDispatch();
@@ -62,6 +64,22 @@ function App() {
             <PublicRoute>
               <LoginPage />
             </PublicRoute>
+          }
+        />
+        <Route
+          path="/upload-post"
+          element={
+            <ProctectedRoute>
+              <UploadPostPage />
+            </ProctectedRoute>
+          }
+        />
+        <Route
+          path="/post/edit/:postId"
+          element={
+            <ProctectedRoute>
+              <EditPostPage />
+            </ProctectedRoute>
           }
         />
       </Routes>

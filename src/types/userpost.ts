@@ -25,6 +25,7 @@ export interface UserPostType {
   comments: PostComment[];
   likes: string[];
   createdAt: string;
+  updatedAt: string;
   commentCount: number;
   likeCount: number;
 }

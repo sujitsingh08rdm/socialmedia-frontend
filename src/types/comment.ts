@@ -9,4 +9,12 @@ export interface CommentType {
   comment: string;
   createdAt: string;
   commentedBy: CommentUser;
+  parentComment?: string | null;
+
+  taggedUser?: {
+    _id: string;
+    username: string;
+  } | null;
+
+  replies?: CommentType[];
 }

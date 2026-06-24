@@ -32,14 +32,9 @@ function UserProfileContainer() {
     }
   };
 
-  // useEffect(() => {
-  //   const init = async () => {
-  //     setLoading(true);
-  //     await refetchProfile();
-  //     setLoading(false);
-  //   };
-  //   init();
-  // }, [username]);
+  const handleDeletePostFromUI = (postId: string) => {
+    setUserPosts((prev) => prev.filter((post) => post._id !== postId));
+  };
 
   useEffect(() => {
     if (!username) {
@@ -104,7 +99,15 @@ function UserProfileContainer() {
         </Link>
       )}
 
-      {postLoading ? <Spinner /> : <UserPosts userPosts={userPosts} />}
+      {postLoading ? (
+        <Spinner />
+      ) : (
+        <UserPosts
+          userPosts={userPosts}
+          refetchProfile={refetchProfile}
+          onDeletePost={handleDeletePostFromUI}
+        />
+      )}
     </div>
   );
 }

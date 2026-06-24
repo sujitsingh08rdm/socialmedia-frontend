@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useEditor, EditorContent } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import Placeholder from "@tiptap/extension-placeholder";
@@ -53,6 +53,12 @@ function PostEditor({ value, onChange }: Props) {
 
     editor.chain().focus().setLink({ href: url }).run();
   };
+
+  useEffect(() => {
+    if (editor && value !== editor.getHTML()) {
+      editor.commands.setContent(value || "");
+    }
+  }, [value, editor]);
 
   return (
     <div className="neo-container border bg-accent-2 overflow-hidden">

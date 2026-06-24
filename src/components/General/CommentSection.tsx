@@ -13,6 +13,7 @@ import Spinner from "./Spinner";
 import defaultImage from "../../assets/default-profileImage.png";
 import { Reply, Trash2 } from "lucide-react";
 import type { UserPostType } from "../../types/userpost";
+import { formatDistanceToNow } from "date-fns";
 
 interface CommentSectionProps {
   post: FeedPostType | UserPostType;
@@ -165,6 +166,11 @@ function CommentSection({ post, setCommentCount }: CommentSectionProps) {
     }
   };
 
+  const getTimeAgo = (date: string) =>
+    formatDistanceToNow(new Date(date), {
+      addSuffix: true,
+    });
+
   useEffect(() => {
     fetchComments();
   }, []);
@@ -231,8 +237,7 @@ function CommentSection({ post, setCommentCount }: CommentSectionProps) {
                   {/* right container */}
                   <div className="flex flex-col items-center gap-1 shrink-0">
                     <span className="text-[10px] px-2 py-1 border-2 border-black bg-white font-bold">
-                      Posted On :{" "}
-                      {new Date(comment.createdAt).toLocaleDateString()}
+                      Posted On : {getTimeAgo(comment.createdAt)}
                     </span>
                     <div className="flex items-center gap-3">
                       <button
@@ -312,13 +317,16 @@ function CommentSection({ post, setCommentCount }: CommentSectionProps) {
                                 reply.commentedBy.profileImage || defaultImage
                               }
                               alt={reply.commentedBy.username}
-                              className="w-8 h-8 rounded-full border-2 border-black"
+                              className="w-10 h-10 rounded-full border-2 border-black"
                             />
 
                             <div className="flex-1">
                               <p className="font-bold text-sm">
                                 {reply.commentedBy.username}
                               </p>
+                              <span className="text-[10px] font-bold opacity-70">
+                                {getTimeAgo(reply.createdAt)}
+                              </span>
 
                               <p className="text-sm">
                                 {reply.taggedUser && (

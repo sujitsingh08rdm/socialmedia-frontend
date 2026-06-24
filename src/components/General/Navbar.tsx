@@ -37,7 +37,7 @@ function Navbar() {
       </Link>
       <div className="neo-container w-auto bg-accent-2 flex flex-row items-center">
         <Link
-          className="p-1 hover:border-2 hover:rounded-full md:p-2 gap-2 w-auto bg-accent-2 flex items-center justify-center"
+          className="p-1 border-2 border-transparent hover:border-2 hover:border-black hover:rounded-full md:p-2 gap-2 w-auto bg-accent-2 flex items-center justify-center"
           to={`/profile/${user?.username}`}
         >
           <img

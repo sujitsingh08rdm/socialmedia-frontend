@@ -6,7 +6,6 @@ import { toast } from "react-toastify";
 import { logout } from "../../store/slices/auth.slice";
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import Spinner from "./Spinner";
 
 function Navbar() {
   const dispatch = useDispatch();

@@ -13,6 +13,7 @@ import FeedPage from "./pages/FeedPage";
 import ProfilePage from "./pages/ProfilePage";
 import UploadPostPage from "./pages/UploadPostPage";
 import EditPostPage from "./pages/EditPostPage";
+import ChatPage from "./pages/ChatPage";
 
 function App() {
   const dispatch = useDispatch();
@@ -58,6 +59,7 @@ function App() {
             </PublicRoute>
           }
         />
+
         <Route
           path="/login"
           element={
@@ -79,6 +81,14 @@ function App() {
           element={
             <ProctectedRoute>
               <EditPostPage />
+            </ProctectedRoute>
+          }
+        />
+        <Route
+          path="/chat/:username/rcid/:receiverId"
+          element={
+            <ProctectedRoute>
+              <ChatPage />
             </ProctectedRoute>
           }
         />

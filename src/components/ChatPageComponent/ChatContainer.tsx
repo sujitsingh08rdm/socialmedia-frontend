@@ -7,9 +7,9 @@ import {
   sendMessage,
 } from "../../api/chat.api";
 import Spinner from "../General/Spinner";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import type { RootState } from "../../store/store";
-import type { Message } from "../../types/chat";
+import type { Conversation, Message } from "../../types/chat";
 
 import defaultImage from "../../assets/default-profileImage.png";
 import { Image, Send } from "lucide-react";
@@ -17,14 +17,22 @@ import { Image, Send } from "lucide-react";
 import { ChatImage } from "./ChatImage";
 import { socket } from "../../socket/socket";
 import { formatMessageTime } from "../../utils/formatMessageTime";
+import {
+  addMessage,
+  setMessages,
+  updateConversation,
+} from "../../store/slices/chat.slice";
 
 function ChatContainer() {
   const { user } = useSelector((state: RootState) => state.auth);
+  const dispatch = useDispatch();
+
+  const messages = useSelector((state: RootState) => state.chat.messages);
   const { receiverId } = useParams<{
     receiverId: string;
   }>();
   const [conversationId, setConversationId] = useState<string | null>(null);
-  const [messages, setMessages] = useState<Message[]>([]);
+
   const [image, setImage] = useState<File | null>(null);
 
   const [text, setText] = useState("");
@@ -51,18 +59,23 @@ function ChatContainer() {
         formData.append("image", image);
       }
 
-      const msg = await sendMessage(formData);
+      const response = await sendMessage(formData);
 
-      setMessages((prev) => {
-        const exists = prev.find((m) => m._id === msg._id);
+      const { conversation, message } = response;
 
-        if (exists) {
-          console.log("Duplicate ignored");
-          return prev;
-        }
+      // setMessages((prev) => {
+      //   const exists = prev.find((m) => m._id === msg._id);
 
-        return [...prev, msg];
-      });
+      //   if (exists) {
+      //     console.log("Duplicate ignored");
+      //     return prev;
+      //   }
+
+      //   return [...prev, msg];
+      // });
+      dispatch(addMessage(message));
+
+      dispatch(updateConversation(conversation));
 
       setText("");
       setImage(null);
@@ -95,7 +108,8 @@ function ChatContainer() {
         socket.emit("join_conversation", conversation._id);
 
         const msgs = await getMessage(conversation._id);
-        setMessages(msgs.reverse());
+        // setMessages(msgs.reverse());
+        dispatch(setMessages(msgs.reverse()));
         setLoading(false);
       } catch (error) {
         console.log(error, "Error initiating chat");
@@ -115,27 +129,21 @@ function ChatContainer() {
   }, [conversationId]);
 
   useEffect(() => {
-    console.log("Registering receiveMessage listener");
-    const handleReceiveMessage = (message: Message) => {
-      if (message.sender._id === user?._id) {
-        return;
-      }
+    const handleConversationUpdated = (data: {
+      conversation: Conversation;
+      message: Message;
+    }) => {
+      dispatch(addMessage(data.message));
 
-      setMessages((prev) => {
-        if (prev.some((m) => m._id === message._id)) {
-          return prev;
-        }
-
-        return [...prev, message];
-      });
+      dispatch(updateConversation(data.conversation));
     };
 
-    socket.on("receiveMessage", handleReceiveMessage);
+    socket.on("conversationUpdated", handleConversationUpdated);
 
     return () => {
-      socket.off("receiveMessage", handleReceiveMessage);
+      socket.off("conversationUpdated", handleConversationUpdated);
     };
-  }, []);
+  }, [dispatch]);
 
   if (loading)
     return (

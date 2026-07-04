@@ -4,12 +4,19 @@ import defaultImage from "../../assets/default-profileImage.png";
 import { NavLink } from "react-router-dom";
 import type { Conversation } from "../../types/chat";
 import { getUserConversations } from "../../api/chat.api";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import type { RootState } from "../../store/store";
+import { setConversations } from "../../store/slices/chat.slice";
 
 function Chatbar() {
   const user = useSelector((state: RootState) => state.auth);
-  const [conversations, setConversations] = useState<Conversation[]>([]);
+  // const [conversations, setConversations] = useState<Conversation[]>([]);
+  const dispatch = useDispatch();
+
+  const conversations = useSelector(
+    (state: RootState) => state.chat.conversations,
+  );
+
   const [loading, setLoading] = useState<boolean>(false);
 
   useEffect(() => {
@@ -18,7 +25,7 @@ function Chatbar() {
         setLoading(true);
         const response = await getUserConversations();
 
-        setConversations(response);
+        dispatch(setConversations(response));
       } catch (error) {
         console.log(error, "failed to fetch followers");
       } finally {

@@ -14,6 +14,7 @@ import type { Message } from "../../types/chat";
 import defaultImage from "../../assets/default-profileImage.png";
 import { Image, Send } from "lucide-react";
 import { formatMessageTime } from "../../utils/formatMessageTime";
+import { ChatImage } from "./ChatImage";
 
 function ChatContainer() {
   const { user } = useSelector((state: RootState) => state.auth);
@@ -23,6 +24,7 @@ function ChatContainer() {
   const [conversationId, setConversationId] = useState<string | null>(null);
   const [messages, setMessages] = useState<Message[]>([]);
   const [image, setImage] = useState<File | null>(null);
+
   const [text, setText] = useState("");
   const [loading, setLoading] = useState(true);
   const bottomRef = useRef<HTMLDivElement>(null);
@@ -138,16 +140,11 @@ function ChatContainer() {
                   <div className="w-8" />
                 )}
                 <div
-                  className={`neo-card pt-2 max-w-[70%] px-2 py-1 ${
+                  className={`neo-container pt-2 w-auto border-1 max-w-[70%] px-2 py-1 ${
                     isMine ? "bg-accent-1" : "bg-accent-2"
                   }`}
                 >
-                  {message.image && (
-                    <img
-                      src={message.image}
-                      className="rounded-xl border-2 mb-1 max-h-72 object-cover"
-                    />
-                  )}
+                  {message.image && <ChatImage src={message.image} />}
 
                   {message.text && (
                     <p className="break-words">{message.text}</p>

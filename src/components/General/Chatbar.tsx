@@ -40,8 +40,8 @@ function Chatbar() {
           <Spinner size={48} />
         </div>
       ) : conversations.length === 0 ? (
-        <div className="flex-1 overflow-y-auto p-2 space-y-4">
-          No conversation found..
+        <div className="flex text-xl font-medium flex-1 overflow-y-auto p-2 space-y-4">
+          No conversation yet..
         </div>
       ) : (
         <div className="flex-1 overflow-y-auto p-2 space-y-4">

@@ -13,8 +13,10 @@ import type { Message } from "../../types/chat";
 
 import defaultImage from "../../assets/default-profileImage.png";
 import { Image, Send } from "lucide-react";
-import { formatMessageTime } from "../../utils/formatMessageTime";
+
 import { ChatImage } from "./ChatImage";
+import { socket } from "../../socket/socket";
+import { formatMessageTime } from "../../utils/formatMessageTime";
 
 function ChatContainer() {
   const { user } = useSelector((state: RootState) => state.auth);
@@ -50,7 +52,18 @@ function ChatContainer() {
       }
 
       const msg = await sendMessage(formData);
-      setMessages((prev) => [...prev, msg]);
+
+      setMessages((prev) => {
+        const exists = prev.find((m) => m._id === msg._id);
+
+        if (exists) {
+          console.log("Duplicate ignored");
+          return prev;
+        }
+
+        return [...prev, msg];
+      });
+
       setText("");
       setImage(null);
 
@@ -77,6 +90,10 @@ function ChatContainer() {
         if (!receiverId) return;
         const conversation = await getOrCreateConversation(receiverId);
         setConversationId(conversation._id);
+
+        console.log("Joining room:", conversation._id);
+        socket.emit("join_conversation", conversation._id);
+
         const msgs = await getMessage(conversation._id);
         setMessages(msgs.reverse());
         setLoading(false);
@@ -88,6 +105,38 @@ function ChatContainer() {
     };
     initChat();
   }, [receiverId]);
+
+  useEffect(() => {
+    if (!conversationId) return;
+
+    return () => {
+      socket.emit("leave_conversation", conversationId);
+    };
+  }, [conversationId]);
+
+  useEffect(() => {
+    console.log("Registering receiveMessage listener");
+    const handleReceiveMessage = (message: Message) => {
+      if (message.sender._id === user?._id) {
+        return;
+      }
+
+      setMessages((prev) => {
+        if (prev.some((m) => m._id === message._id)) {
+          return prev;
+        }
+
+        return [...prev, message];
+      });
+    };
+
+    socket.on("receiveMessage", handleReceiveMessage);
+
+    return () => {
+      socket.off("receiveMessage", handleReceiveMessage);
+    };
+  }, []);
+
   if (loading)
     return (
       <div className="min-w-[63vw] p-2 flex-1 flex flex-col items-center justify-center user-profile-scroll overflow-y-auto neo-container bg-secondary m-1">

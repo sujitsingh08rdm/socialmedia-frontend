@@ -56,8 +56,8 @@ function Chatbar() {
                 key={conversation._id}
                 to={`/chat/${otherUser.username}/rcid/${otherUser._id}`}
                 className={({ isActive }) =>
-                  `neo-card w-full flex items-center gap-3 p-3 bg-accent-1 border-2 transition-all ${
-                    isActive ? "border-violet-900 bg-accent-1" : "bg-accent-2"
+                  `neo-card w-full flex items-center gap-3 p-3 border-2 transition-all ${
+                    isActive ? "bg-violet-300" : "bg-accent-2"
                   }`
                 }
               >

@@ -126,7 +126,7 @@ function ChatContainer() {
             return (
               <div
                 key={message._id}
-                className={`flex gap-1 ${isMine ? "justify-end" : "justify-start"}`}
+                className={`flex items-end gap-1 ${isMine ? "justify-end" : "justify-start"}`}
               >
                 {!isMine && showAvatar ? (
                   <img
@@ -138,7 +138,7 @@ function ChatContainer() {
                   <div className="w-8" />
                 )}
                 <div
-                  className={`neo-card max-w-[70%] px-2 py-1 ${
+                  className={`neo-card pt-2 max-w-[70%] px-2 py-1 ${
                     isMine ? "bg-accent-1" : "bg-accent-2"
                   }`}
                 >
@@ -180,17 +180,18 @@ function ChatContainer() {
           <div className="mb-3 inline-block relative">
             <img
               src={URL.createObjectURL(image)}
-              className="h-24 w-24 object-cover rounded-xl border-2 border-black"
+              className={`h-24 w-24 object-cover rounded-xl border-2 border-black ${sending && "opacity-60"}`}
             />
 
             <button
+              disabled={sending}
               onClick={() => {
                 setImage(null);
                 if (fileInputRef.current) {
                   fileInputRef.current.value = "";
                 }
               }}
-              className="absolute -top-2 -right-2 h-7 w-7 rounded-full bg-red-500 text-white border-2 border-black flex items-center justify-center"
+              className="absolute -top-2 -right-2 h-7 w-7 rounded-full bg-red-500 text-white border-2 border-black flex items-center justify-center cursor-pointer disabled:opacity-65 disabled:cursor-not-allowed"
             >
               ✕
             </button>
@@ -213,8 +214,9 @@ function ChatContainer() {
 
           {/* Image Button */}
           <button
+            disabled={sending}
             onClick={() => fileInputRef.current?.click()}
-            className="neo-button bg-accent-1 h-12 w-12 flex items-center justify-center shrink-0"
+            className="neo-button bg-accent-1 h-12 w-12 flex items-center justify-center shrink-0 disabled:opacity-50"
           >
             <Image size={22} />
           </button>
@@ -225,7 +227,7 @@ function ChatContainer() {
             disabled={sending}
             onChange={(e) => setText(e.target.value)}
             placeholder="Type a message..."
-            className="neo-input flex-1 h-12 px-4"
+            className="neo-input flex-1 h-12 px-4 disabled:opacity-50"
             onKeyDown={(e) => {
               if (e.key === "Enter" && !e.shiftKey) {
                 e.preventDefault();

@@ -23,6 +23,8 @@ import { useDispatch, useSelector } from "react-redux";
 import type { RootState } from "../../store/store";
 import Spinner from "../General/Spinner";
 import { setUser } from "../../store/slices/auth.slice";
+import { useNavigate } from "react-router-dom";
+import { getOrCreateConversation } from "../../api/chat.api";
 
 interface UserInfoProps {
   user: userProfileInfoType;
@@ -45,6 +47,8 @@ function UserInfo({ user, refetchProfile }: UserInfoProps) {
   const [isEditingBio, setIsEditingBio] = useState<boolean>(false);
   const [bioInput, setBioInput] = useState(user.bio || "");
   const [bioLoading, setBioLoading] = useState(false);
+
+  const navigate = useNavigate();
 
   const handleFollowToggle = async () => {
     try {
@@ -149,6 +153,15 @@ function UserInfo({ user, refetchProfile }: UserInfoProps) {
       toast.error(error.message || "Failed to remove bio");
     } finally {
       setBioLoading(false);
+    }
+  };
+
+  const handleMessage = async () => {
+    try {
+      await getOrCreateConversation(user._id);
+      navigate(`/chat/${user.username}/rcid/${user._id}`);
+    } catch (error) {
+      toast.error("Failed to start conversation");
     }
   };
 
@@ -321,10 +334,15 @@ function UserInfo({ user, refetchProfile }: UserInfoProps) {
               {isFollowing ? "Unfollow" : "Follow"}
             </button>
           )}
-          <button className="neo-button bg-button-2 px-2 py-1 flex items-center gap-2 hover:-translate-y-1 transition-transform">
-            <MessageCircle size={16} />
-            Message
-          </button>
+          {!isOwnProfile && (
+            <button
+              onClick={handleMessage}
+              className="neo-button bg-button-2 px-2 py-1 flex items-center gap-2 hover:-translate-y-1 transition-transform"
+            >
+              <MessageCircle size={16} />
+              Message
+            </button>
+          )}
         </div>
       </div>
     </div>

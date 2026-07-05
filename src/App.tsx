@@ -17,11 +17,30 @@ import ChatPage from "./pages/ChatPage";
 import { socket } from "./socket/socket";
 import type { RootState } from "./store/store";
 import { Socket } from "socket.io-client";
+import type { Conversation } from "./types/chat";
+import type { Message } from "react-hook-form";
+import { updateConversation } from "./store/slices/chat.slice";
 
 function App() {
   const user = useSelector((state: RootState) => state.auth.user);
 
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    const handleConversationUpdated = (data: {
+      conversation: Conversation;
+      message: Message;
+    }) => {
+      console.log("APP received conversationUpdated", data);
+      dispatch(updateConversation(data.conversation));
+    };
+
+    socket.on("conversationUpdated", handleConversationUpdated);
+
+    return () => {
+      socket.off("conversationUpdated", handleConversationUpdated);
+    };
+  }, [dispatch]);
 
   useEffect(() => {
     const loadUser = async () => {
@@ -36,23 +55,6 @@ function App() {
     };
     loadUser();
   }, [dispatch]);
-
-  // useEffect(() => {
-  //   if (!user) return;
-
-  //   socket.connect();
-
-  //   socket.on("connect", () => {
-  //     console.log("Connected:", socket.id);
-
-  //     socket.emit("join", user._id);
-  //   });
-
-  //   return () => {
-  //     socket.off("connect");
-  //     socket.disconnect();
-  //   };
-  // }, [user]);
 
   useEffect(() => {
     if (!user) return;

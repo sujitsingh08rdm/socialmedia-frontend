@@ -12,6 +12,7 @@ export interface Conversation {
     image?: string;
     sender: User;
   };
+  unreadCount: number;
 }
 
 export interface Message {

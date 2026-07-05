@@ -31,9 +31,13 @@ const chatSlice = createSlice({
     updateConversation(state, action: PayloadAction<Conversation>) {
       const updatedConversation = action.payload;
 
+      console.log("Redux update:", updatedConversation);
+
       const index = state.conversations.findIndex(
         (c) => c._id === updatedConversation._id,
       );
+
+      console.log("Index:", index);
 
       if (index !== -1) {
         state.conversations[index] = updatedConversation;

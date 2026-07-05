@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import Spinner from "./Spinner";
 import defaultImage from "../../assets/default-profileImage.png";
 import { NavLink } from "react-router-dom";
-import type { Conversation } from "../../types/chat";
+
 import { getUserConversations } from "../../api/chat.api";
 import { useDispatch, useSelector } from "react-redux";
 import type { RootState } from "../../store/store";
@@ -35,6 +35,9 @@ function Chatbar() {
 
     loadConversation();
   }, []);
+
+  console.log("ChatBar rendered");
+  console.log(conversations);
 
   return (
     <aside className="neo-container w-75 h-full border-l-2 rounded-none flex flex-col">
@@ -80,9 +83,23 @@ function Chatbar() {
                 <div className="flex-1 text-left">
                   <h3 className="font-bold">{otherUser.username}</h3>
                   {conversation.lastMessage ? (
-                    <p className="text-sm text-muted-foreground">
-                      {conversation.lastMessage.text}
-                    </p>
+                    <div className="flex items-center justify-between">
+                      <p
+                        className={`text-sm truncate ${
+                          conversation.unreadCount > 0
+                            ? "font-semibold text-black"
+                            : "text-muted-foreground"
+                        }`}
+                      >
+                        {conversation.lastMessage.text}
+                      </p>
+
+                      {conversation.unreadCount > 0 && (
+                        <span className="ml-2 min-w-6 h-6 px-2 flex items-center justify-center rounded-full bg-red-500 text-white text-xs font-bold">
+                          {conversation.unreadCount}
+                        </span>
+                      )}
+                    </div>
                   ) : (
                     <p className="text-sm text-muted-foreground">
                       Start chatting...

@@ -4,6 +4,7 @@ import { useParams } from "react-router-dom";
 import {
   getMessage,
   getOrCreateConversation,
+  markSeen,
   sendMessage,
 } from "../../api/chat.api";
 import Spinner from "../General/Spinner";
@@ -104,10 +105,17 @@ function ChatContainer() {
         const conversation = await getOrCreateConversation(receiverId);
         setConversationId(conversation._id);
 
-        console.log("Joining room:", conversation._id);
         socket.emit("join_conversation", conversation._id);
 
         const msgs = await getMessage(conversation._id);
+
+        try {
+          await markSeen(conversation._id);
+        } catch (err) {
+          console.error("markSeen failed", err);
+        }
+
+        // await markSeen(conversation._id);
         // setMessages(msgs.reverse());
         dispatch(setMessages(msgs.reverse()));
         setLoading(false);
@@ -133,6 +141,7 @@ function ChatContainer() {
       conversation: Conversation;
       message: Message;
     }) => {
+      console.log("conversationUpdated:", data);
       dispatch(addMessage(data.message));
 
       dispatch(updateConversation(data.conversation));

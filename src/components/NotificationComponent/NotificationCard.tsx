@@ -27,9 +27,9 @@ function NotificationCard({ notification }: NotificationCardProps) {
       : "bg-accent-2 border-2 border-black shadow-[6px_6px_0px_#000]"
   }
 `}
-      onClick={() => {
-        navigate(`/post/${notification.post._id}`);
-      }}
+      // onClick={() => {
+      //   navigate(`/post/${notification.post._id}`);
+      // }}
     >
       <div className="flex gap-4 items-center">
         <div className="relative">

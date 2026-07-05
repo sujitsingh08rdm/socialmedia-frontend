@@ -36,9 +36,6 @@ function Chatbar() {
     loadConversation();
   }, []);
 
-  console.log("ChatBar rendered");
-  console.log(conversations);
-
   return (
     <aside className="neo-container w-75 h-full border-l-2 rounded-none flex flex-col">
       {/* Header */}

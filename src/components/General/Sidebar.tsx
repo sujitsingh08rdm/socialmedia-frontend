@@ -5,7 +5,7 @@ import { logout } from "../../store/slices/auth.slice";
 import { logoutUser } from "../../api/auth.api";
 import { toast } from "react-toastify";
 import { useState } from "react";
-import { Home, LogOut, User2 } from "lucide-react";
+import { Bell, Home, LogOut, User2 } from "lucide-react";
 
 export default function Sidebar() {
   const dispatch = useDispatch();
@@ -52,6 +52,15 @@ export default function Sidebar() {
           }
         >
           <User2 /> Profile
+        </NavLink>
+        <NavLink
+          to={`/notifications`}
+          end
+          className={({ isActive }) =>
+            `${baseClasses} ${isActive ? activeClasses : inActiveClasses}`
+          }
+        >
+          <Bell /> Notifications
         </NavLink>
       </div>
       <div className="p-1 md:p-4 p2">

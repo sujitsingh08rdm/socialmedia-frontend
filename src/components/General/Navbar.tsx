@@ -8,7 +8,7 @@ import { useEffect, useRef, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import type { SearchUser } from "../../types/searchUser";
 import { searchUser } from "../../api/feed.api";
-import { Search } from "lucide-react";
+import { Bell, Search } from "lucide-react";
 
 function Navbar() {
   const dispatch = useDispatch();
@@ -20,6 +20,10 @@ function Navbar() {
   const [results, setResults] = useState<SearchUser[]>([]);
   const [loading, setLoading] = useState(false);
   const [open, setOpen] = useState(false);
+
+  const unreadCount = useSelector(
+    (state: RootState) => state.notification.unreadCount,
+  );
 
   const searchRef = useRef<HTMLDivElement>(null);
 
@@ -135,7 +139,7 @@ function Navbar() {
         )}
       </div>
 
-      <div className="neo-container w-auto bg-accent-2 flex flex-row items-center">
+      <div className="neo-container w-auto bg-accent-2 gap-2 flex flex-row items-center">
         <Link
           className="p-1 border-2 border-transparent hover:border-2 hover:border-black hover:rounded-full md:p-2 gap-2 w-auto bg-accent-2 flex items-center justify-center"
           to={`/profile/${user?.username}`}
@@ -145,15 +149,39 @@ function Navbar() {
             src={user?.profileImage ? user?.profileImage : defaultImage}
           />
           <span className="text-black font-medium">{user?.username}</span>
-        </Link>{" "}
-        <div className="p-1 md:p-2">
+        </Link>
+        <div className="relative">
           <button
-            type="submit"
-            className="neo-button p-0.5 md:p-1 bg-button-1 hover-bg-button-1 ease-in-out font-bold"
-            onClick={handleLogout}
+            className="neo-button cursor-pointer bg-lime-500 hover:bg-lime-300  p-2"
+            onClick={() => navigate("/notifications")}
           >
-            Logout
+            <Bell />
           </button>
+
+          {unreadCount > 0 && (
+            <span
+              className="
+                absolute
+                -top-2
+                -right-2
+                min-w-6
+                h-6
+                px-1
+                rounded-full
+                bg-red-500
+                border-2
+                border-black
+                text-white
+                text-xs
+                font-bold
+                flex
+                items-center
+                justify-center
+            "
+            >
+              {unreadCount}
+            </span>
+          )}
         </div>
       </div>
     </nav>

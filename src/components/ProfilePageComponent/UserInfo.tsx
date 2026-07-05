@@ -34,7 +34,6 @@ interface UserInfoProps {
 function UserInfo({ user, refetchProfile }: UserInfoProps) {
   const currentUser = useSelector((state: RootState) => state.auth.user);
   const dispatch = useDispatch();
-  console.log(currentUser, "<- currentUser");
 
   const isOwnProfile = currentUser?.username === user.username;
 

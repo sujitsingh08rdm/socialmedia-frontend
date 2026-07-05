@@ -3,7 +3,7 @@ import RegisterPage from "./pages/RegisterPage";
 import LoginPage from "./pages/LoginPage";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
 import { getCurrentUser } from "./api/auth.api";
 import { setUser, setAuthLoad } from "./store/slices/auth.slice";
@@ -14,9 +14,33 @@ import ProfilePage from "./pages/ProfilePage";
 import UploadPostPage from "./pages/UploadPostPage";
 import EditPostPage from "./pages/EditPostPage";
 import ChatPage from "./pages/ChatPage";
+import { socket } from "./socket/socket";
+import type { RootState } from "./store/store";
+import { Socket } from "socket.io-client";
+import type { Conversation } from "./types/chat";
+import type { Message } from "react-hook-form";
+import { updateConversation } from "./store/slices/chat.slice";
 
 function App() {
+  const user = useSelector((state: RootState) => state.auth.user);
+
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    const handleConversationUpdated = (data: {
+      conversation: Conversation;
+      message: Message;
+    }) => {
+      console.log("APP received conversationUpdated", data);
+      dispatch(updateConversation(data.conversation));
+    };
+
+    socket.on("conversationUpdated", handleConversationUpdated);
+
+    return () => {
+      socket.off("conversationUpdated", handleConversationUpdated);
+    };
+  }, [dispatch]);
 
   useEffect(() => {
     const loadUser = async () => {
@@ -31,6 +55,34 @@ function App() {
     };
     loadUser();
   }, [dispatch]);
+
+  useEffect(() => {
+    if (!user) return;
+
+    if (!socket.connected) {
+      socket.connect();
+    }
+
+    const handleConnect = () => {
+      console.log("Connected:", socket.id);
+      socket.emit("join", user._id);
+    };
+
+    socket.on("connect", handleConnect);
+
+    // If already connected (page refreshed after auth)
+    if (socket.connected) {
+      handleConnect();
+    }
+
+    return () => {
+      socket.off("connect", handleConnect);
+    };
+  }, [user]);
+
+  useEffect(() => {
+    (window as any).socket = Socket;
+  }, []);
 
   return (
     <div className="bg-primary min-h-screen">

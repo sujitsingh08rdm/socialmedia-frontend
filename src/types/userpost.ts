@@ -21,6 +21,9 @@ export interface UserPostType {
   _id: string;
   content: string;
   image?: string;
+  video?: string;
+  videoThumbnail?: string;
+
   owner: PostOwner;
   comments: PostComment[];
   likes: string[];

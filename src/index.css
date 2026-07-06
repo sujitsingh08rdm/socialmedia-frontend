@@ -70,6 +70,18 @@
     @apply w-full p-2 shadow-[3px_3px_0px_#000];
   }
 
+  .neo-video {
+    width: 100%;
+    display: block;
+    border: 4px solid #000;
+    border-radius: 12px;
+    background: #fff;
+    box-shadow: 8px 8px 0 #000;
+    transition:
+      transform 0.2s ease,
+      box-shadow 0.2s ease;
+  }
+
   .neo-input {
     @apply w-full border-2 border-black p-2 shadow-[3px_3px_0px_#000] outline-none;
   }
@@ -130,6 +142,74 @@
 
   .neo-error-animate {
     animation: errorPop 0.25s ease-out;
+  }
+
+  .neo-player {
+    width: 100%;
+    background: #fff;
+    border: 4px solid #000;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 8px 8px 0 #000;
+  }
+
+  .video-wrapper {
+    position: relative;
+    background: black;
+  }
+
+  .video-wrapper video {
+    width: 100%;
+    display: block;
+  }
+
+  .loader {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    font-weight: bold;
+    background: rgba(0, 0, 0, 0.45);
+  }
+
+  .controls {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    padding: 12px;
+    background: #ffe96a;
+    border-top: 4px solid black;
+    flex-wrap: wrap;
+  }
+
+  .controls button {
+    border: 3px solid black;
+    background: white;
+    font-weight: bold;
+    padding: 8px 14px;
+    cursor: pointer;
+    box-shadow: 4px 4px 0 black;
+    transition: 0.15s;
+  }
+
+  .controls button:hover {
+    transform: translate(-2px, -2px);
+    box-shadow: 6px 6px 0 black;
+  }
+
+  .controls button:active {
+    transform: translate(2px, 2px);
+    box-shadow: 2px 2px 0 black;
+  }
+
+  .controls input[type="range"] {
+    cursor: pointer;
+  }
+
+  .controls input:first-of-type {
+    flex: 1;
   }
 
   @keyframes errorPop {

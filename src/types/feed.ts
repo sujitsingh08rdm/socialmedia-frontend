@@ -21,6 +21,9 @@ export interface FeedPostType {
   _id: string;
   content: string;
   image?: string;
+  video?: string;
+  videoThumbnail?: string;
+
   owner: FeedOwner;
   comments: FeedComment[];
   likes: string[];

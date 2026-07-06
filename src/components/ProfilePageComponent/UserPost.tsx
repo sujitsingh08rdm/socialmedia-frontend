@@ -12,6 +12,7 @@ import type { CommentType } from "../../types/comment";
 import { getCommentsByPostId } from "../../api/comment.api";
 import { Link } from "react-router-dom";
 import { deletePost } from "../../api/post.api";
+import HlsVideoPlayer from "../General/HlsVideoPlayer";
 
 interface Props {
   post: UserPostType;
@@ -29,6 +30,9 @@ export default function UserPost({
   const [likes, setLikes] = useState<string[]>(post.likes);
   const [profileLoading, setProfileLoading] = useState(true);
   const [postImageLoading, setPostImageLoading] = useState(!!post.image);
+  const [postVideoLoading, setPostVideoLoading] = useState(!!post.video);
+
+  const [playVideo, setPlayVideo] = useState(false);
 
   const [likeCount, setLikeCount] = useState<number>(post.likeCount);
   const [loading, setLoading] = useState(false);
@@ -194,6 +198,63 @@ export default function UserPost({
               }`}
             />
           </>
+        )}
+
+        {post.video && (
+          <div className="relative mt-2">
+            {!playVideo ? (
+              <div
+                className="relative aspect-video overflow-hidden rounded-lg cursor-pointer group border-2 border-black"
+                onClick={() => setPlayVideo(true)}
+              >
+                {/* Spinner */}
+                {postVideoLoading && (
+                  <div className="absolute inset-0 z-20 flex items-center justify-center bg-black/10">
+                    <Spinner />
+                  </div>
+                )}
+
+                <img
+                  src={post.videoThumbnail}
+                  alt="Video thumbnail"
+                  onLoad={() => setPostVideoLoading(false)}
+                  onError={() => setPostVideoLoading(false)}
+                  className={`h-full w-full object-contain transition-opacity duration-300 ${
+                    postVideoLoading ? "opacity-0" : "opacity-100"
+                  }`}
+                />
+
+                {!postVideoLoading && (
+                  <>
+                    <div className="absolute inset-0 bg-black/20 group-hover:bg-black/35 transition-colors" />
+
+                    <div className="absolute inset-0 flex items-center justify-center">
+                      <div className="neo-button bg-button-2 rounded-full p-2">
+                        ▶
+                      </div>
+                    </div>
+                  </>
+                )}
+              </div>
+            ) : (
+              <div className="relative">
+                {postVideoLoading && (
+                  <div className="absolute inset-0 flex items-center justify-center rounded-lg bg-black/20 z-10">
+                    <Spinner />
+                  </div>
+                )}
+
+                <HlsVideoPlayer
+                  src={post.video}
+                  onReady={() => setPostVideoLoading(false)}
+                  onError={() => setPostVideoLoading(false)}
+                  className={`rounded-lg w-full max-h-[600px] ${
+                    postVideoLoading ? "opacity-0 absolute" : "opacity-100"
+                  }`}
+                />
+              </div>
+            )}
+          </div>
         )}
 
         <div className="relative mt-2">

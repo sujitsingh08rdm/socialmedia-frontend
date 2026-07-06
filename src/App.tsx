@@ -1,7 +1,7 @@
 import { Routes, Route } from "react-router-dom";
 import RegisterPage from "./pages/RegisterPage";
 import LoginPage from "./pages/LoginPage";
-import { ToastContainer } from "react-toastify";
+import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
@@ -20,6 +20,13 @@ import { Socket } from "socket.io-client";
 import type { Conversation } from "./types/chat";
 import type { Message } from "react-hook-form";
 import { updateConversation } from "./store/slices/chat.slice";
+import {
+  addNotification,
+  setNotifications,
+} from "./store/slices/notification.slice";
+import type { Notification } from "./types/notification";
+import { getNotification } from "./api/notification.api";
+import NotificationPage from "./pages/NotificationPage";
 
 function App() {
   const user = useSelector((state: RootState) => state.auth.user);
@@ -39,6 +46,21 @@ function App() {
 
     return () => {
       socket.off("conversationUpdated", handleConversationUpdated);
+    };
+  }, [dispatch]);
+
+  useEffect(() => {
+    const handleNotification = (notification: Notification) => {
+      dispatch(addNotification(notification));
+      console.log("📩 Notification received:", notification);
+
+      toast.success(`${notification.sender.username} liked your post ❤️`);
+    };
+
+    socket.on("notification", handleNotification);
+
+    return () => {
+      socket.off("notification", handleNotification);
     };
   }, [dispatch]);
 
@@ -78,6 +100,19 @@ function App() {
     return () => {
       socket.off("connect", handleConnect);
     };
+  }, [user]);
+
+  useEffect(() => {
+    if (!user) return;
+
+    const loadNotifications = async () => {
+      const response = await getNotification();
+      console.log(response);
+
+      dispatch(setNotifications(response));
+    };
+
+    loadNotifications();
   }, [user]);
 
   useEffect(() => {
@@ -125,6 +160,14 @@ function App() {
           element={
             <ProctectedRoute>
               <UploadPostPage />
+            </ProctectedRoute>
+          }
+        />
+        <Route
+          path="/notifications"
+          element={
+            <ProctectedRoute>
+              <NotificationPage />
             </ProctectedRoute>
           }
         />

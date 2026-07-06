@@ -1,23 +1,28 @@
-import React, { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { toast } from "react-toastify";
 import { createPost } from "../../api/post.api";
 import PostEditor from "./PostEditor";
 import Spinner from "../General/Spinner";
 import { useNavigate } from "react-router-dom";
-import { useSelector } from "react-redux";
-import type { RootState } from "../../store/store";
 
 function UploadPostContainer() {
   const [content, setContent] = useState<string | null>("");
   const [image, setImage] = useState<File | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
-  const [imageFilename, setImageFilename] = useState<string | undefined | null>(
-    null,
-  );
+  // const [imageFilename, setImageFilename] = useState<string | undefined | null>(
+  //   null,
+  // );
+  const [video, setVideo] = useState<File | undefined | null>(undefined);
+
   const [previewImage, setPreviewImage] = useState<string | undefined | null>(
     null,
   );
+  const [previewVideo, setPreviewVideo] = useState<string | undefined | null>(
+    null,
+  );
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const videoInputRef = useRef<HTMLInputElement>(null);
+
   const navigate = useNavigate();
 
   const handleCreatePost = async () => {
@@ -33,16 +38,26 @@ function UploadPostContainer() {
       if (image) {
         formData.append("image", image);
       }
+
+      if (video) {
+        formData.append("video", video);
+      }
+
       setLoading(true);
       await createPost(formData);
       toast.success("Post uploaded Succesfully");
 
       setContent(null);
       setImage(null);
-      setImageFilename(null);
+      // setImageFilename(null);
       setPreviewImage(null);
+      setPreviewVideo(null);
+      setVideo(null);
       if (fileInputRef.current) {
         fileInputRef.current.value = "";
+      }
+      if (videoInputRef.current) {
+        videoInputRef.current.value = "";
       }
       navigate("/");
     } catch (error: any) {
@@ -52,6 +67,35 @@ function UploadPostContainer() {
       setLoading(false);
     }
   };
+
+  const handleImageSelect = (file: File) => {
+    // Backend rejects image + video together, so clear video first
+    if (video) {
+      setVideo(null);
+      if (videoInputRef.current) videoInputRef.current.value = "";
+    }
+    setImage(file);
+  };
+
+  const handleVideoSelect = (file: File) => {
+    if (image) {
+      setImage(null);
+      if (fileInputRef.current) fileInputRef.current.value = "";
+    }
+    setVideo(file);
+  };
+
+  useEffect(() => {
+    if (!video) {
+      setPreviewVideo(null);
+      return;
+    }
+
+    const url = URL.createObjectURL(video);
+    setPreviewVideo(url);
+
+    return () => URL.revokeObjectURL(url);
+  }, [video]);
 
   useEffect(() => {
     if (!image) {
@@ -123,7 +167,7 @@ function UploadPostContainer() {
               type="button"
               onClick={() => {
                 setImage(null);
-                setImageFilename(null);
+                // setImageFilename(null);
                 if (fileInputRef.current) {
                   fileInputRef.current.value = "";
                 }
@@ -146,20 +190,25 @@ function UploadPostContainer() {
 
             if (!file) return;
 
-            setImage(file);
-            setImageFilename(file.name);
+            handleImageSelect(file);
+            // setImage(file);
+            // setImageFilename(file.name);
           }}
         />
 
         {!image ? (
-          <div className="flex flex-col sm:flex-row gap-3">
+          <div className={`flex flex-col sm:flex-row gap-3`}>
             <div className="neo-file-display flex-1 min-w-0 truncate">
-              No image selected
+              {video ? "Remove video to attach an image" : "No image selected"}
             </div>
 
             <label
               htmlFor="fileInput"
-              className="neo-button bg-button-1 cursor-pointer text-center"
+              className={`neo-button text-center ${
+                video
+                  ? "bg-gray-300 cursor-not-allowed opacity-50 pointer-events-none"
+                  : "bg-button-1 cursor-pointer"
+              }`}
             >
               Choose Image
             </label>
@@ -186,6 +235,85 @@ function UploadPostContainer() {
             >
               Replace
             </label>
+          </div>
+        )}
+      </div>
+      {/* Video */}
+      <div className="neo-card bg-accent-3 mt-4">
+        <div className="flex items-center justify-between mb-3">
+          <p className="font-bold">Attach Video</p>
+
+          {video && (
+            <button
+              type="button"
+              onClick={() => {
+                setVideo(null);
+                if (videoInputRef.current) {
+                  videoInputRef.current.value = "";
+                }
+              }}
+              className="neo-button cursor-pointer bg-red-400 px-2 py-1 text-sm"
+            >
+              Remove
+            </button>
+          )}
+        </div>
+
+        <input
+          type="file"
+          accept="video/*"
+          id="videoInput"
+          ref={videoInputRef}
+          hidden
+          onChange={(e) => {
+            const file = e.target.files?.[0];
+            if (!file) return;
+            handleVideoSelect(file);
+          }}
+        />
+
+        {!video ? (
+          <div className="flex flex-col sm:flex-row gap-3">
+            <div className="neo-file-display flex-1 min-w-0 truncate">
+              {image ? "Remove image to attach a video" : "No video selected"}
+            </div>
+
+            <label
+              htmlFor="videoInput"
+              className={`neo-button text-center ${
+                image
+                  ? "bg-gray-300 cursor-not-allowed opacity-50 pointer-events-none"
+                  : "bg-button-1 cursor-pointer"
+              }`}
+            >
+              Choose Video
+            </label>
+          </div>
+        ) : (
+          <div className="flex flex-col gap-3">
+            <div className="flex items-center gap-3">
+              <div className="flex-1 min-w-0">
+                <p className="font-bold truncate">{video.name}</p>
+                <p className="text-xs opacity-70">
+                  {(video.size / 1024 / 1024).toFixed(2)} MB
+                </p>
+              </div>
+
+              <label
+                htmlFor="videoInput"
+                className="neo-button bg-button-1 cursor-pointer text-center text-sm"
+              >
+                Replace
+              </label>
+            </div>
+
+            {previewVideo && (
+              <video
+                src={previewVideo}
+                controls
+                className="w-full max-h-72 object-contain border-2 border-black bg-black"
+              />
+            )}
           </div>
         )}
       </div>

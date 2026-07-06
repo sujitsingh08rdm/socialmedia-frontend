@@ -9,6 +9,7 @@ import Chatbar from "../components/General/Chatbar";
 import { getFeedPost } from "../api/feed.api";
 import type { FeedPostType } from "../types/feed";
 import FeedPost from "../components/FeedPageComponent/FeedPost";
+import { socket } from "../socket/socket";
 
 function FeedPage() {
   const { loading } = useSelector((state: RootState) => state.auth);
@@ -35,6 +36,16 @@ function FeedPage() {
     };
 
     getPosts();
+
+    const handleNewPost = (newPost: FeedPostType) => {
+      setFeedPosts((prev) => [newPost, ...prev]);
+    };
+
+    socket.on("new_post", handleNewPost);
+
+    return () => {
+      socket.off("new_post", handleNewPost);
+    };
   }, []);
 
   if (loading) {

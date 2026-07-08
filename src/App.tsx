@@ -27,6 +27,7 @@ import {
 import type { Notification } from "./types/notification";
 import { getNotification } from "./api/notification.api";
 import NotificationPage from "./pages/NotificationPage";
+import PostDetailsPage from "./pages/PostDetailsPage";
 
 function App() {
   const user = useSelector((state: RootState) => state.auth.user);
@@ -131,6 +132,15 @@ function App() {
           }
         />
         <Route
+          path="/:postId"
+          element={
+            <ProctectedRoute>
+              <PostDetailsPage />
+            </ProctectedRoute>
+          }
+        />
+
+        <Route
           path="/profile/:username"
           element={
             <ProctectedRoute>
@@ -138,6 +148,7 @@ function App() {
             </ProctectedRoute>
           }
         />
+
         <Route
           path="/register"
           element={
@@ -155,6 +166,7 @@ function App() {
             </PublicRoute>
           }
         />
+
         <Route
           path="/upload-post"
           element={
@@ -163,6 +175,7 @@ function App() {
             </ProctectedRoute>
           }
         />
+
         <Route
           path="/notifications"
           element={
@@ -171,6 +184,7 @@ function App() {
             </ProctectedRoute>
           }
         />
+
         <Route
           path="/post/edit/:postId"
           element={
@@ -179,6 +193,7 @@ function App() {
             </ProctectedRoute>
           }
         />
+
         <Route
           path="/chat/:username/rcid/:receiverId"
           element={

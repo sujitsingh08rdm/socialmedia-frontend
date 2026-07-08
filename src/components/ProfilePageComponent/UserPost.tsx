@@ -184,97 +184,98 @@ export default function UserPost({
           className="prose prose-invert font-semibold whitespace-pre-wrap"
           dangerouslySetInnerHTML={{ __html: post.content }}
         /> */}
+        <Link to={`/${post._id}`}>
+          {post.image && (
+            <>
+              {postImageLoading && <Spinner />}
+              <img
+                src={post.image}
+                alt="post"
+                onLoad={() => setPostImageLoading(false)}
+                onError={() => setPostImageLoading(false)}
+                className={`mt-1 rounded-lg max-h-100 object-cover transition-opacity duration-300 ${
+                  postImageLoading ? "opacity-0" : "opacity-100"
+                }`}
+              />
+            </>
+          )}
 
-        {post.image && (
-          <>
-            {postImageLoading && <Spinner />}
-            <img
-              src={post.image}
-              alt="post"
-              onLoad={() => setPostImageLoading(false)}
-              onError={() => setPostImageLoading(false)}
-              className={`mt-1 rounded-lg max-h-100 object-cover transition-opacity duration-300 ${
-                postImageLoading ? "opacity-0" : "opacity-100"
-              }`}
-            />
-          </>
-        )}
-
-        {post.video && (
-          <div className="relative mt-2">
-            {!playVideo ? (
-              <div
-                className="relative aspect-video overflow-hidden rounded-lg cursor-pointer group border-2 border-black"
-                onClick={() => setPlayVideo(true)}
-              >
-                {/* Spinner */}
-                {postVideoLoading && (
-                  <div className="absolute inset-0 z-20 flex items-center justify-center bg-black/10">
-                    <Spinner />
-                  </div>
-                )}
-
-                <img
-                  src={post.videoThumbnail}
-                  alt="Video thumbnail"
-                  onLoad={() => setPostVideoLoading(false)}
-                  onError={() => setPostVideoLoading(false)}
-                  className={`h-full w-full object-contain transition-opacity duration-300 ${
-                    postVideoLoading ? "opacity-0" : "opacity-100"
-                  }`}
-                />
-
-                {!postVideoLoading && (
-                  <>
-                    <div className="absolute inset-0 bg-black/20 group-hover:bg-black/35 transition-colors" />
-
-                    <div className="absolute inset-0 flex items-center justify-center">
-                      <div className="neo-button bg-button-2 rounded-full p-2">
-                        ▶
-                      </div>
+          {post.video && (
+            <div className="relative mt-2">
+              {!playVideo ? (
+                <div
+                  className="relative aspect-video overflow-hidden rounded-lg cursor-pointer group border-2 border-black"
+                  onClick={() => setPlayVideo(true)}
+                >
+                  {/* Spinner */}
+                  {postVideoLoading && (
+                    <div className="absolute inset-0 z-20 flex items-center justify-center bg-black/10">
+                      <Spinner />
                     </div>
-                  </>
-                )}
-              </div>
-            ) : (
-              <div className="relative">
-                {postVideoLoading && (
-                  <div className="absolute inset-0 flex items-center justify-center rounded-lg bg-black/20 z-10">
-                    <Spinner />
-                  </div>
-                )}
+                  )}
 
-                <HlsVideoPlayer
-                  src={post.video}
-                  onReady={() => setPostVideoLoading(false)}
-                  onError={() => setPostVideoLoading(false)}
-                  className={`rounded-lg w-full max-h-[600px] ${
-                    postVideoLoading ? "opacity-0 absolute" : "opacity-100"
-                  }`}
-                />
-              </div>
+                  <img
+                    src={post.videoThumbnail}
+                    alt="Video thumbnail"
+                    onLoad={() => setPostVideoLoading(false)}
+                    onError={() => setPostVideoLoading(false)}
+                    className={`h-full w-full object-contain transition-opacity duration-300 ${
+                      postVideoLoading ? "opacity-0" : "opacity-100"
+                    }`}
+                  />
+
+                  {!postVideoLoading && (
+                    <>
+                      <div className="absolute inset-0 bg-black/20 group-hover:bg-black/35 transition-colors" />
+
+                      <div className="absolute inset-0 flex items-center justify-center">
+                        <div className="neo-button bg-button-2 rounded-full p-2">
+                          ▶
+                        </div>
+                      </div>
+                    </>
+                  )}
+                </div>
+              ) : (
+                <div className="relative">
+                  {postVideoLoading && (
+                    <div className="absolute inset-0 flex items-center justify-center rounded-lg bg-black/20 z-10">
+                      <Spinner />
+                    </div>
+                  )}
+
+                  <HlsVideoPlayer
+                    src={post.video}
+                    onReady={() => setPostVideoLoading(false)}
+                    onError={() => setPostVideoLoading(false)}
+                    className={`rounded-lg w-full max-h-[600px] ${
+                      postVideoLoading ? "opacity-0 absolute" : "opacity-100"
+                    }`}
+                  />
+                </div>
+              )}
+            </div>
+          )}
+
+          <div className="relative mt-2">
+            <div
+              ref={contentRef}
+              className={`prose prose-invert font-semibold whitespace-pre-wrap max-w-none  transition-all duration-300 ${expanded ? "" : "line-clamp-3 overflow-hidden"}`}
+              dangerouslySetInnerHTML={{ __html: post.content }}
+            />
+            <div className="neo-card p-1 mt-1 bg-accent-2">
+              Posted on - {new Date(post.createdAt).toLocaleDateString()}{" "}
+            </div>
+            {isOverflowing && (
+              <button
+                onClick={() => setExpanded((prev) => !prev)}
+                className="mt-1 neo-button  text-sm cursor-pointer hover:underline"
+              >
+                {expanded ? "Show less" : "Show More"}
+              </button>
             )}
           </div>
-        )}
-
-        <div className="relative mt-2">
-          <div
-            ref={contentRef}
-            className={`prose prose-invert font-semibold whitespace-pre-wrap max-w-none  transition-all duration-300 ${expanded ? "" : "line-clamp-3 overflow-hidden"}`}
-            dangerouslySetInnerHTML={{ __html: post.content }}
-          />
-          <div className="neo-card p-1 mt-1 bg-accent-2">
-            Posted on - {new Date(post.createdAt).toLocaleDateString()}{" "}
-          </div>
-          {isOverflowing && (
-            <button
-              onClick={() => setExpanded((prev) => !prev)}
-              className="mt-1 neo-button  text-sm cursor-pointer hover:underline"
-            >
-              {expanded ? "Show less" : "Show More"}
-            </button>
-          )}
-        </div>
+        </Link>
 
         <div className="flex items-center gap-4">
           <div className="flex items-center gap-1 text-pink-500 hover:text-pink-700">

@@ -32,5 +32,5 @@ export const editPost = async (formData: FormData, postId: string) => {
 export const getUserPostById = async (postId: string) => {
   const response = await api.get(`/posts/${postId}`);
 
-  return response.data;
+  return response.data.data;
 };

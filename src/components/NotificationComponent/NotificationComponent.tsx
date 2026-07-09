@@ -62,7 +62,9 @@ function NotificationComponent() {
   if (notifications.length === 0) {
     return (
       <div className="min-w-[63vw] p-2 flex-1 flex flex-col user-profile-scroll overflow-y-auto neo-container bg-secondary m-1">
-        <h2 className="text-3xl font-black">🔔 Notifications</h2>
+        <h2 className="text-3xl text-center font-black  ml-10">
+          🔔 Notifications
+        </h2>
         <div className="flex-1 flex justify-center items-center">
           <p className="text-xl font-bold">No notifications yet 🎉</p>
         </div>
@@ -82,7 +84,7 @@ function NotificationComponent() {
     <div className="min-w-[63vw] p-2 flex-1 flex flex-col user-profile-scroll overflow-y-auto neo-container bg-secondary m-1">
       <div className="border-b-2 border-black pb-3">
         <div className="flex justify-between items-center border-black pb-3">
-          <h1 className="text-3xl font-black">Notifications</h1>
+          <h1 className="text-3xl font-black ml-10">Notifications</h1>
           {unreadCount > 0 && (
             <div className="flex items-center gap-3">
               {unreadCount > 0 && (

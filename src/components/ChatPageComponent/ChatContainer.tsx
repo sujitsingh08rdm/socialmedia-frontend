@@ -162,10 +162,10 @@ function ChatContainer() {
     );
 
   return (
-    <div className="min-w-[63vw] p-2 flex-1 flex flex-col user-profile-scroll overflow-y-auto neo-container bg-secondary m-1">
+    <div className="min-w-[63vw] mx-4 my-2 p-2 flex-1 flex flex-col user-profile-scroll overflow-y-auto neo-container bg-secondary m-1">
       {/* Header */}
       <div className="flex items-center justify-between border-b-2 p-4">
-        <div>
+        <div className="flex flex-col justify-center items-center">
           <h2 className="text-xl font-black"> Chat </h2>
           <p className="text-sm opacity-70">
             {messages.length} message{messages.length !== 1 && "s"}
@@ -303,7 +303,7 @@ function ChatContainer() {
           <button
             disabled={sending || (!text.trim() && !image)}
             onClick={handleSend}
-            className="neo-button bg-accent-2 h-12 w-12 flex items-center justify-center shrink-0 disabled:opacity-50"
+            className="neo-button mr-8 bg-accent-2 h-12 w-12 flex items-center justify-center shrink-0 disabled:opacity-50"
           >
             {sending ? <Spinner size={18} /> : <Send size={20} />}
           </button>

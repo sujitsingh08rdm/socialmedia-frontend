@@ -8,12 +8,13 @@ import { useEffect, useRef, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import type { SearchUser } from "../../types/searchUser";
 import { searchUser } from "../../api/feed.api";
-import { Bell, Search } from "lucide-react";
+import { Bell, PanelLeftClose, SearchIcon, X } from "lucide-react";
 
 function Navbar() {
   const dispatch = useDispatch();
   const user = useSelector((state: RootState) => state.auth.user);
   const [serverError, setServerError] = useState<string | null>(null);
+  const [isSearching, setIsSearching] = useState<boolean>(false);
   const navigate = useNavigate();
 
   const [query, setQuery] = useState("");
@@ -77,17 +78,19 @@ function Navbar() {
   }, []);
 
   return (
-    <nav className="flex px-6 py-2 justify-between items-center border-b-2 border-indigo-800 md:px-12 md:py-4 sticky shadow-indigo-900 shadow-xs">
+    <nav className="flex px-3 py-1 gap-2  md:gap-4 lg:gap-6 md:px-6 md:py-2 justify-between items-center border-b-2 border-indigo-800 lg:px-12 lg:py-4 sticky shadow-indigo-900 shadow-xs">
       <Link
         to="/"
-        className="text-2xl 2xl hover:scale-105 md:text-4xl font-black text-black neo-card bg-accent-1 inline-block"
+        className={`${isSearching ? "hidden md:block" : ""}text-xl md:text-2xl lg:text-4xl hover:scale-105 font-black text-black neo-card bg-accent-1 inline-block`}
       >
         bingeHub
       </Link>
 
       <div
         ref={searchRef}
-        className="relative hidden md:flex w-full max-w-xl mx-8"
+        className={`relative transition-all duration-300 ${
+          isSearching ? "flex-1" : "hidden"
+        } md:flex md:flex-1 md:max-w-md md:mx-6`}
       >
         <input
           type="text"
@@ -97,10 +100,19 @@ function Navbar() {
             setQuery(e.target.value);
             setOpen(true);
           }}
-          className="neo-input w-full bg-accent-1 p-4 text-black font-medium outline-none"
+          className="neo-input w-full bg-accent-1 p-4 text-black font-medium outline-none neo-input bg-accent-1"
         />
+        <button
+          type="button"
+          onClick={() => setIsSearching(false)}
+          aria-label="Close search"
+          className="absolute md:hidden right-5 top-1/2 -translate-y-1/2 p-1 hover:bg-black/10 rounded-full"
+        >
+          <X size={20} />
+        </button>
+
         {open && (
-          <div className="absolute top-full mt-2 w-full neo-card bg-accent-2 max-h-80 overflow-y-auto z-50">
+          <div className="absolute feed-scroll left-0 top-full mt-2 w-full neo-card bg-accent-2 max-h-80 overflow-y-auto z-50">
             {loading && (
               <div className="p-4 text-center font-bold">Searching...</div>
             )}
@@ -139,20 +151,26 @@ function Navbar() {
         )}
       </div>
 
-      <div className="neo-container w-auto bg-accent-2 gap-2 flex flex-row items-center">
+      <div
+        className={`${
+          isSearching ? "hidden md:flex" : "flex"
+        } neo-container p-1 md:p-2 w-auto bg-accent-2 gap-1 md:gap-2 flex flex-row items-center`}
+      >
         <Link
           className="p-1 border-2 border-transparent hover:border-2 hover:border-black hover:rounded-full md:p-2 gap-2 w-auto bg-accent-2 flex items-center justify-center"
           to={`/profile/${user?.username}`}
         >
           <img
-            className="w-[48px] border-2 border-primary aspect-square rounded-full bg-cover object-cover"
+            className="w-12 md:w-14 border-2 border-primary aspect-square rounded-full bg-cover object-cover"
             src={user?.profileImage ? user?.profileImage : defaultImage}
           />
-          <span className="text-black font-medium">{user?.username}</span>
+          <span className="text-black hidden md:block font-medium">
+            {user?.username}
+          </span>
         </Link>
-        <div className="relative">
+        <div className="relative flex">
           <button
-            className="neo-button cursor-pointer bg-lime-500 hover:bg-lime-300  p-2"
+            className="p-1 md:p-2 neo-button cursor-pointer bg-lime-500 hover:bg-lime-300"
             onClick={() => navigate("/notifications")}
           >
             <Bell />
@@ -164,8 +182,10 @@ function Navbar() {
                 absolute
                 -top-2
                 -right-2
-                min-w-6
-                h-6
+                miw-w-3
+                h-3
+                md:min-w-6
+                md:h-6
                 px-1
                 rounded-full
                 bg-red-500
@@ -183,6 +203,12 @@ function Navbar() {
             </span>
           )}
         </div>
+        <button
+          className="md:hidden cursor-pointer bg-accent-1 opacity-90 hover:opacity-100 neo-button p-1"
+          onClick={() => setIsSearching((prev) => !prev)}
+        >
+          {isSearching ? <PanelLeftClose /> : <SearchIcon />}
+        </button>
       </div>
     </nav>
   );

@@ -58,16 +58,16 @@
 
 @layer components {
   .neo-card {
-    @apply bg-white border-2 border-black shadow-[6px_6px_0px_#000] p-4;
+    @apply bg-white border-2 border-black shadow-[3px_3px_0px_#000]  md:shadow-[6px_6px_0px_#000] p-4;
   }
 
   .neo-button {
-    @apply border-2 border-black font-bold px-4 py-2 shadow-[4px_4px_0px_#000]
+    @apply border-2 border-black font-bold px-4 py-2 shadow-[2px_2px_0px_#000] md:shadow-[4px_4px_0px_#000]
            active:translate-x-[2px] active:translate-y-[2px];
   }
 
   .neo-container {
-    @apply w-full p-2 shadow-[3px_3px_0px_#000];
+    @apply w-full p-2 shadow-[1px_1px_0px_#000] md:shadow-[3px_3px_0px_#000];
   }
 
   .neo-video {
@@ -83,7 +83,7 @@
   }
 
   .neo-input {
-    @apply w-full border-2 border-black p-2 shadow-[3px_3px_0px_#000] outline-none;
+    @apply w-full border-2 border-black p-2 md:shadow-[3px_3px_0px_#000] outline-none;
   }
 
   .neo-input:focus {
@@ -96,16 +96,16 @@
   }
 
   .neo-file {
-    @apply border-2 border-black  p-2 flex items-center gap-2 shadow-[4px_4px_0px_#000];
+    @apply border-2 border-black  p-2 flex items-center gap-2 md:shadow-[4px_4px_0px_#000];
   }
 
   .neo-file-display {
-    @apply border-2 border-black px-2 py-1 text-sm shadow-[2px_2px_0px_#000];
+    @apply border-2 border-black px-2 py-1 text-sm md:shadow-[2px_2px_0px_#000];
   }
 
   .neo-file-btn {
     @apply border-2 border-black px-3 py-1 font-bold cursor-pointer
-           shadow-[3px_3px_0px_#000]
+           md:shadow-[3px_3px_0px_#000]
            active:translate-x-[2px] active:translate-y-[2px];
   }
 
@@ -136,7 +136,7 @@
 
   .neo-error {
     @apply bg-[#ff1e00] text-white border-1 border-black text-xs
-           p-1 font-semibold shadow-[4px_4px_0px_#000]
+           p-1 font-semibold md:shadow-[4px_4px_0px_#000]
            flex items-center gap-2  transition-all duration-300 ease-in-out;
   }
 

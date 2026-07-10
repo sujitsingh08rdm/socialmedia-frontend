@@ -200,7 +200,11 @@ function FeedPost({ post }: FeedPostProps) {
               />
               {isOverflowing && (
                 <button
-                  onClick={() => setExpanded((prev) => !prev)}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    setExpanded((prev) => !prev);
+                  }}
                   className="mt-1 neo-button  text-sm cursor-pointer hover:underline"
                 >
                   {expanded ? "Show less" : "Show More"}

@@ -54,7 +54,7 @@ function PostDetailContainer({ postId }: PostIdProp) {
   }
 
   return (
-    <div className="min-w-[63vw] p-2 flex flex-col gap-3 overflow-y-auto user-profile-scroll">
+    <div className="w-full md:min-w-[63vw] p-2 flex flex-col gap-3 overflow-y-auto user-profile-scroll">
       {/* Header */}
       <div className="neo-container bg-secondary">
         <div className="neo-card bg-accent-1 flex items-center gap-3">

@@ -237,7 +237,13 @@ export default function UserPost({
                   )}
                 </div>
               ) : (
-                <div className="relative">
+                <div
+                  className="relative"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                  }}
+                >
                   {postVideoLoading && (
                     <div className="absolute inset-0 flex items-center justify-center rounded-lg bg-black/20 z-10">
                       <Spinner />
@@ -268,7 +274,11 @@ export default function UserPost({
             </div>
             {isOverflowing && (
               <button
-                onClick={() => setExpanded((prev) => !prev)}
+                onClick={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  setExpanded((prev) => !prev);
+                }}
                 className="mt-1 neo-button  text-sm cursor-pointer hover:underline"
               >
                 {expanded ? "Show less" : "Show More"}

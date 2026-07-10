@@ -108,7 +108,6 @@ function App() {
 
     const loadNotifications = async () => {
       const response = await getNotification();
-      console.log(response);
 
       dispatch(setNotifications(response));
     };

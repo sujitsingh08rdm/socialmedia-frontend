@@ -113,7 +113,7 @@ function UploadPostContainer() {
   return (
     <div className="min-w-[63vw] p-2 flex flex-col user-profile-scroll overflow-y-auto neo-container bg-secondary m-1">
       <div className="neo-card bg-accent-1 mb-4">
-        <h2 className="text-xl font-black uppercase tracking-wide">
+        <h2 className="ml-5 text-xl font-black uppercase tracking-wide">
           Create Post
         </h2>
         <p className="text-sm opacity-70">

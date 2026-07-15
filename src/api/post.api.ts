@@ -34,3 +34,8 @@ export const getUserPostById = async (postId: string) => {
 
   return response.data.data;
 };
+
+export const getMainPost = async () => {
+  const response = await api.get("/posts/main-posts");
+  return response.data.data;
+};

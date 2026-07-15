@@ -59,7 +59,7 @@ function UploadPostContainer() {
       if (videoInputRef.current) {
         videoInputRef.current.value = "";
       }
-      navigate("/");
+      navigate("/home");
     } catch (error: any) {
       console.log(error);
       toast.error(error.message || "Something went wrong");

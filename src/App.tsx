@@ -7,7 +7,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
 import { getCurrentUser } from "./api/auth.api";
 import { setUser, setAuthLoad } from "./store/slices/auth.slice";
-import ProctectedRoute from "./routes/ProctectedRoute";
+import ProtectedRoute from "./routes/ProtectedRoute";
 import PublicRoute from "./routes/PublicRoute";
 import FeedPage from "./pages/FeedPage";
 import ProfilePage from "./pages/ProfilePage";
@@ -28,6 +28,7 @@ import type { Notification } from "./types/notification";
 import { getNotification } from "./api/notification.api";
 import NotificationPage from "./pages/NotificationPage";
 import PostDetailsPage from "./pages/PostDetailsPage";
+import MainPage from "./pages/MainPage";
 
 function App() {
   const user = useSelector((state: RootState) => state.auth.user);
@@ -53,7 +54,6 @@ function App() {
   useEffect(() => {
     const handleNotification = (notification: Notification) => {
       dispatch(addNotification(notification));
-      console.log("📩 Notification received:", notification);
 
       toast.success(`${notification.sender.username} liked your post ❤️`);
     };
@@ -125,26 +125,34 @@ function App() {
         <Route
           index
           element={
-            <ProctectedRoute>
+            <PublicRoute>
+              <MainPage />
+            </PublicRoute>
+          }
+        />
+        <Route
+          path="/home"
+          element={
+            <ProtectedRoute>
               <FeedPage />
-            </ProctectedRoute>
+            </ProtectedRoute>
           }
         />
         <Route
           path="/:postId"
           element={
-            <ProctectedRoute>
+            <ProtectedRoute>
               <PostDetailsPage />
-            </ProctectedRoute>
+            </ProtectedRoute>
           }
         />
 
         <Route
           path="/profile/:username"
           element={
-            <ProctectedRoute>
+            <ProtectedRoute>
               <ProfilePage />
-            </ProctectedRoute>
+            </ProtectedRoute>
           }
         />
 
@@ -169,36 +177,36 @@ function App() {
         <Route
           path="/upload-post"
           element={
-            <ProctectedRoute>
+            <ProtectedRoute>
               <UploadPostPage />
-            </ProctectedRoute>
+            </ProtectedRoute>
           }
         />
 
         <Route
           path="/notifications"
           element={
-            <ProctectedRoute>
+            <ProtectedRoute>
               <NotificationPage />
-            </ProctectedRoute>
+            </ProtectedRoute>
           }
         />
 
         <Route
           path="/post/edit/:postId"
           element={
-            <ProctectedRoute>
+            <ProtectedRoute>
               <EditPostPage />
-            </ProctectedRoute>
+            </ProtectedRoute>
           }
         />
 
         <Route
           path="/chat/:username/rcid/:receiverId"
           element={
-            <ProctectedRoute>
+            <ProtectedRoute>
               <ChatPage />
-            </ProctectedRoute>
+            </ProtectedRoute>
           }
         />
       </Routes>

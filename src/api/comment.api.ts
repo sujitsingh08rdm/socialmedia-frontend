@@ -6,6 +6,12 @@ export const getCommentsByPostId = async (postId: string) => {
   return response.data.data;
 };
 
+export const getMainPageCommentsByPostId = async (postId: string) => {
+  const response = await api.get(`comments/main-all/${postId}`);
+
+  return response.data.data;
+};
+
 export const createComment = async (
   postId: string,
   comment: string,

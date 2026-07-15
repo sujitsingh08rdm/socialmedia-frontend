@@ -80,7 +80,7 @@ function Navbar() {
   return (
     <nav className="flex px-3 py-1 gap-2  md:gap-4 lg:gap-6 md:px-6 md:py-2 justify-between items-center border-b-2 border-indigo-800 lg:px-12 lg:py-4 sticky shadow-indigo-900 shadow-xs">
       <Link
-        to="/"
+        to="/home"
         className={`${isSearching ? "hidden md:block" : ""}text-xl md:text-2xl lg:text-4xl hover:scale-105 font-black text-black neo-card bg-accent-1 inline-block`}
       >
         bingeHub

@@ -38,7 +38,7 @@ export default function Sidebar() {
     <div className="h-full flex flex-col justify-between border-r-2 border-indigo-800 shadow-indigo-900 shadow-xs">
       <div className="flex flex-col gap-2 p-2">
         <NavLink
-          to="/"
+          to="/home"
           end
           onClick={() => setIsSidebarOpen(false)}
           className={({ isActive }) =>

@@ -34,7 +34,7 @@ function LoginUserForm() {
       dispatch(setUser(response.data.user));
       toast.success(response.message);
       reset();
-      navigate("/");
+      navigate("/home");
     } catch (error: any) {
       console.log("Catch block hit:", error);
       setServerError(error.message);

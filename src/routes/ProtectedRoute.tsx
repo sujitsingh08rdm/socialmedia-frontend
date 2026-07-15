@@ -8,7 +8,7 @@ interface Props {
   children: JSX.Element;
 }
 
-const ProctectedRoute = ({ children }: Props) => {
+const ProtectedRoute = ({ children }: Props) => {
   const { isAuthenticated, loading } = useSelector(
     (state: RootState) => state.auth,
   );
@@ -24,4 +24,4 @@ const ProctectedRoute = ({ children }: Props) => {
   return children;
 };
 
-export default ProctectedRoute;
+export default ProtectedRoute;

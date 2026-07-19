@@ -106,7 +106,7 @@ function LoginUserForm() {
       {/* Button */}
       <button
         type="submit"
-        className="neo-button bg-button-1 hover-bg-button-1 ease-in-out font-bold"
+        className="neo-button bg-button-1 hover-bg-button-1 ease-in-out font-bold cursor-pointer"
       >
         {loading ? <Spinner /> : "Login"}
       </button>

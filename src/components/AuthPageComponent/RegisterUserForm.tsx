@@ -175,7 +175,7 @@ function RegisterUserForm() {
       <button
         type="submit"
         disabled={loading}
-        className="neo-button bg-button-1 hover-bg-button-1 ease-in-out font-bold"
+        className="neo-button bg-button-1 hover-bg-button-1 ease-in-out font-bold cursor-pointer"
       >
         {loading ? <Spinner /> : "Register your account"}
       </button>

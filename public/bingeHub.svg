@@ -1,0 +1,17 @@
+<svg width="512" height="512" viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="512" height="512" rx="120" fill="#111827"></rect>
+
+  <!-- Film reel circle -->
+  <circle cx="256" cy="256" r="150" fill="#EF4444"></circle>
+
+  <!-- Reel holes -->
+  <circle cx="256" cy="145" r="28" fill="#111827"></circle>
+  <circle cx="155" cy="315" r="28" fill="#111827"></circle>
+  <circle cx="357" cy="315" r="28" fill="#111827"></circle>
+
+  <!-- Play button -->
+  <path d="M220 190L350 256L220 322V190Z" fill="white"></path>
+
+  <!-- Small hub text mark -->
+  <path d="M190 370C220 395 292 395 322 370" stroke="white" stroke-width="14" stroke-linecap="round"></path>
+</svg>

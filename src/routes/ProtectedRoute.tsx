@@ -14,7 +14,11 @@ const ProtectedRoute = ({ children }: Props) => {
   );
 
   if (loading) {
-    return <Spinner />;
+    return (
+      <div className="fixed inset-0 flex items-center justify-center bg-primary z-50">
+        <Spinner size={78} />
+      </div>
+    );
   }
 
   if (!isAuthenticated) {

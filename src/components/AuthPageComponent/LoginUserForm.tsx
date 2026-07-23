@@ -24,6 +24,12 @@ function LoginUserForm() {
     reset,
   } = useForm<LoginUserFormData>({ resolver: zodResolver(loginUserSchema) });
 
+  const { onChange: passwordOnChange, ...passwordRegister } =
+    register("password");
+
+  const { onChange: identifierOnChange, ...identifierRegister } =
+    register("identifier");
+
   const onSubmit = async (data: LoginUserFormData) => {
     // data.indentifier =username or email
     try {
@@ -59,8 +65,11 @@ function LoginUserForm() {
       <div>
         <label className="neo-label">Username/Email</label>
         <input
-          {...register("identifier")}
-          onChange={() => clearErrors("identifier")}
+          {...identifierRegister}
+          onChange={(e) => {
+            identifierOnChange(e);
+            clearErrors("identifier");
+          }}
           type="text"
           placeholder="Enter your username/email"
           className="neo-input neo-input:focus bg-accent-1"
@@ -76,8 +85,11 @@ function LoginUserForm() {
       <div>
         <label className="neo-label">Password</label>
         <input
-          {...register("password")}
-          onChange={() => clearErrors("password")}
+          {...passwordRegister}
+          onChange={(e) => {
+            passwordOnChange(e);
+            clearErrors("password");
+          }}
           type="password"
           placeholder="Enter your password"
           className="neo-input neo-input:focus bg-accent-2"

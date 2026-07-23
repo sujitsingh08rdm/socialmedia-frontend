@@ -120,7 +120,7 @@ function FeedPost({ post }: FeedPostProps) {
       </div>
       <div className="neo-card bg-accent-1 mt-2">
         <div className="neo-card bg-accent-2">
-          <Link to={`${post._id}`}>
+          <Link to={`/${post._id}`}>
             {post.image && (
               <>
                 {postImageLoading && <Spinner />}

@@ -4,12 +4,14 @@ import LoginPage from "./pages/LoginPage";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useDispatch, useSelector } from "react-redux";
-import { useEffect } from "react";
+import { lazy, Suspense, useEffect } from "react";
 import { getCurrentUser } from "./api/auth.api";
 import { setUser, setAuthLoad } from "./store/slices/auth.slice";
 import ProtectedRoute from "./routes/ProtectedRoute";
 import PublicRoute from "./routes/PublicRoute";
-import FeedPage from "./pages/FeedPage";
+// import FeedPage from "./pages/FeedPage";
+const FeedPage = lazy(() => import("./pages/FeedPage"));
+
 import ProfilePage from "./pages/ProfilePage";
 import UploadPostPage from "./pages/UploadPostPage";
 import EditPostPage from "./pages/EditPostPage";
@@ -27,8 +29,11 @@ import {
 import type { Notification } from "./types/notification";
 import { getNotification } from "./api/notification.api";
 import NotificationPage from "./pages/NotificationPage";
-import PostDetailsPage from "./pages/PostDetailsPage";
+// import PostDetailsPage from "./pages/PostDetailsPage";
+const PostDetailsPage = lazy(() => import("./pages/PostDetailsPage"));
+
 import MainPage from "./pages/MainPage";
+import Spinner from "./components/General/Spinner";
 
 function App() {
   const user = useSelector((state: RootState) => state.auth.user);
@@ -121,95 +126,103 @@ function App() {
 
   return (
     <div className="bg-primary min-h-screen">
-      <Routes>
-        <Route
-          index
-          element={
-            <PublicRoute>
-              <MainPage />
-            </PublicRoute>
-          }
-        />
-        <Route
-          path="/home"
-          element={
-            <ProtectedRoute>
-              <FeedPage />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/:postId"
-          element={
-            <ProtectedRoute>
-              <PostDetailsPage />
-            </ProtectedRoute>
-          }
-        />
+      <Suspense
+        fallback={
+          <div className="fixed inset-0 flex items-center justify-center bg-primary z-50">
+            <Spinner size={78} />
+          </div>
+        }
+      >
+        <Routes>
+          <Route
+            index
+            element={
+              <PublicRoute>
+                <MainPage />
+              </PublicRoute>
+            }
+          />
+          <Route
+            path="/home"
+            element={
+              <ProtectedRoute>
+                <FeedPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/:postId"
+            element={
+              <ProtectedRoute>
+                <PostDetailsPage />
+              </ProtectedRoute>
+            }
+          />
 
-        <Route
-          path="/profile/:username"
-          element={
-            <ProtectedRoute>
-              <ProfilePage />
-            </ProtectedRoute>
-          }
-        />
+          <Route
+            path="/profile/:username"
+            element={
+              <ProtectedRoute>
+                <ProfilePage />
+              </ProtectedRoute>
+            }
+          />
 
-        <Route
-          path="/register"
-          element={
-            <PublicRoute>
-              <RegisterPage />
-            </PublicRoute>
-          }
-        />
+          <Route
+            path="/register"
+            element={
+              <PublicRoute>
+                <RegisterPage />
+              </PublicRoute>
+            }
+          />
 
-        <Route
-          path="/login"
-          element={
-            <PublicRoute>
-              <LoginPage />
-            </PublicRoute>
-          }
-        />
+          <Route
+            path="/login"
+            element={
+              <PublicRoute>
+                <LoginPage />
+              </PublicRoute>
+            }
+          />
 
-        <Route
-          path="/upload-post"
-          element={
-            <ProtectedRoute>
-              <UploadPostPage />
-            </ProtectedRoute>
-          }
-        />
+          <Route
+            path="/upload-post"
+            element={
+              <ProtectedRoute>
+                <UploadPostPage />
+              </ProtectedRoute>
+            }
+          />
 
-        <Route
-          path="/notifications"
-          element={
-            <ProtectedRoute>
-              <NotificationPage />
-            </ProtectedRoute>
-          }
-        />
+          <Route
+            path="/notifications"
+            element={
+              <ProtectedRoute>
+                <NotificationPage />
+              </ProtectedRoute>
+            }
+          />
 
-        <Route
-          path="/post/edit/:postId"
-          element={
-            <ProtectedRoute>
-              <EditPostPage />
-            </ProtectedRoute>
-          }
-        />
+          <Route
+            path="/post/edit/:postId"
+            element={
+              <ProtectedRoute>
+                <EditPostPage />
+              </ProtectedRoute>
+            }
+          />
 
-        <Route
-          path="/chat/:username/rcid/:receiverId"
-          element={
-            <ProtectedRoute>
-              <ChatPage />
-            </ProtectedRoute>
-          }
-        />
-      </Routes>
+          <Route
+            path="/chat/:username/rcid/:receiverId"
+            element={
+              <ProtectedRoute>
+                <ChatPage />
+              </ProtectedRoute>
+            }
+          />
+        </Routes>
+      </Suspense>
       <ToastContainer />
     </div>
   );
